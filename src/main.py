@@ -24,8 +24,9 @@ FPS = 60
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill((0, 255, 0))  # Green square for now
+        self.original_image = pygame.Surface((50, 50))
+        self.original_image.fill((0, 255, 0))  # Green square for now
+        self.image = self.original_image.copy()
         self.rect = self.image.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         self.health = 100
         self.speed = 5
@@ -33,12 +34,24 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
-        target_vector = pygame.math.Vector2(mouse_pos)
-        current_vector = pygame.math.Vector2(self.rect.center)
+        
+        # --- Rotation Logic ---
+        # Vector from player to mouse
+        direction = pygame.math.Vector2(mouse_pos) - self.rect.center
+        # Angle of the vector in degrees. Vector2(1, 0) is the x-axis.
+        angle = direction.angle_to(pygame.math.Vector2(1, 0))
 
+        # Rotate the original image to avoid quality loss
+        self.image = pygame.transform.rotate(self.original_image, -angle) # Negative angle because y-axis is inverted
+        self.rect = self.image.get_rect(center=self.rect.center)
+        # --- End Rotation Logic ---
+
+        # --- Movement Logic ---
         # Smooth movement using linear interpolation (lerp)
-        # A smaller fraction results in smoother, slower following
+        current_vector = pygame.math.Vector2(self.rect.center)
+        target_vector = pygame.math.Vector2(mouse_pos)
         self.rect.center = current_vector.lerp(target_vector, 0.05)
+        # --- End Movement Logic ---
 
         # Keep player on screen
         if self.rect.left < 0:
