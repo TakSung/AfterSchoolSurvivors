@@ -10,7 +10,72 @@
         "priority": "high",
         "dependencies": [],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Python 3.13+ 가상환경 설정",
+            "description": "Python 3.13+ 버전으로 가상환경을 생성하고 활성화합니다.",
+            "dependencies": [],
+            "details": "python -m venv venv 명령으로 가상환경 생성, 가상환경 활성화 스크립트 실행, Python 버전 확인 및 pip 업그레이드",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "프로젝트 폴더 구조 및 의존성 설정",
+            "description": "프로젝트 디렉토리 구조를 생성하고 requirements.txt 파일을 작성합니다.",
+            "dependencies": [
+              "1.1"
+            ],
+            "details": "src/, assets/, tests/ 폴더 생성, requirements.txt에 pygame>=2.5.0 추가, pip install -r requirements.txt로 의존성 설치",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Pygame 기본 윈도우 및 초기화 시스템 구현",
+            "description": "800x600 크기의 게임 윈도우를 생성하고 Pygame을 초기화합니다.",
+            "dependencies": [
+              "1.2"
+            ],
+            "details": "pygame.init(), 게임 윈도우 생성(800x600), 윈도우 제목 설정, 아이콘 설정, 기본 배경색 설정, pygame.display.update() 구현",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "메인 게임 루프 프레임워크 구현",
+            "description": "60 FPS 제한과 함께 기본 게임 루프를 구현합니다.",
+            "dependencies": [
+              "1.3"
+            ],
+            "details": "pygame.time.Clock() 생성, while 게임루프, event 처리, update() 메서드, draw() 메서드, FPS 60 제한, quit 이벤트 처리",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "입력 처리 시스템 구현",
+            "description": "키보드와 마우스 입력을 처리하는 시스템을 구현합니다.",
+            "dependencies": [
+              "1.4"
+            ],
+            "details": "pygame.event.get() 처리, 키보드 입력 감지(KEYDOWN, KEYUP), 마우스 위치 및 클릭 감지, ESC 키로 게임 종료 기능",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "기본 리소스 매니저 클래스 구현",
+            "description": "이미지, 사운드 등 게임 리소스를 관리하는 ResourceManager 클래스를 구현합니다.",
+            "dependencies": [
+              "1.4"
+            ],
+            "details": "ResourceManager 클래스 생성, 이미지 로딩/캐싱 시스템, 사운드 로딩 시스템, 리소스 경로 관리, 싱글톤 패턴 적용",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 2,
@@ -23,7 +88,87 @@
           1
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Player 클래스 기본 구조 및 초기화 시스템 구현",
+            "description": "Player 클래스를 생성하고 기본 속성들(위치, 체력, 스탯)을 초기화하는 시스템을 구현합니다.",
+            "dependencies": [],
+            "details": "Player 클래스 생성, 기본 속성 정의(position, health=100, speed, attack_speed), 생성자 구현, 기본 스탯 설정 및 초기화 메서드 구현",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "마우스 위치 추적 및 부드러운 이동 알고리즘 구현",
+            "description": "플레이어가 마우스 커서를 따라 부드럽게 이동하는 시스템을 구현합니다.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "마우스 위치 감지, 플레이어와 마우스 간 거리 계산, 선형 보간을 이용한 부드러운 이동, 이동 속도 조절, 화면 경계 충돌 방지",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "캐릭터 회전 시스템 구현",
+            "description": "플레이어 캐릭터가 마우스 방향을 향해 회전하는 시스템을 구현합니다.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "마우스와 플레이어 간 각도 계산, 스프라이트 회전 적용, 부드러운 회전 애니메이션, 회전 각도 정규화 및 최적화",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "자동 공격 시스템 및 투사체 생성 구현",
+            "description": "플레이어가 자동으로 공격하고 투사체를 발사하는 시스템을 구현합니다.",
+            "dependencies": [
+              "2.3"
+            ],
+            "details": "자동 공격 타이머, 투사체 클래스 생성, 발사 방향 계산, 공격 속도 조절, 투사체 생성 및 관리 시스템",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "체력 관리 시스템 구현",
+            "description": "플레이어의 체력을 관리하고 피해를 처리하는 시스템을 구현합니다.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "체력 감소/증가 메서드, 무적 시간 시스템, 사망 처리, 체력 상태 확인, 체력 관련 이벤트 처리",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "플레이어 스프라이트 렌더링 시스템 구현",
+            "description": "2D 도트 스타일의 플레이어 캐릭터 스프라이트를 렌더링하는 시스템을 구현합니다.",
+            "dependencies": [
+              "2.2",
+              "2.3"
+            ],
+            "details": "2D 도트 스프라이트 로드, 스프라이트 렌더링, 회전된 스프라이트 표시, 애니메이션 프레임 관리, 스프라이트 크기 및 위치 조정",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "플레이어 시스템 통합 및 테스트",
+            "description": "모든 플레이어 기능을 통합하고 전체 시스템을 테스트합니다.",
+            "dependencies": [
+              "2.2",
+              "2.4",
+              "2.5",
+              "2.6"
+            ],
+            "details": "모든 시스템 통합, 마우스 추적 이동 테스트, 자동 공격 발사 테스트, 체력 감소 테스트, 경계선 충돌 방지 확인, 성능 최적화",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 3,
@@ -141,7 +286,61 @@
           3
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Experience 클래스 및 기본 경험치 시스템 구현",
+            "description": "경험치 관리를 위한 Experience 클래스를 생성하고 기본적인 경험치 획득 및 저장 로직을 구현합니다.",
+            "dependencies": [],
+            "details": "Experience 클래스 생성, 현재 경험치/레벨/다음 레벨까지 필요한 경험치 속성 정의, 경험치 획득 메서드 구현, 레벨별 필요 경험치 곡선 공식 설계(지수 증가), 경험치 저장 및 로드 기능",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "적 처치 시 경험치 획득 로직 구현",
+            "description": "적이 처치될 때 플레이어가 경험치를 획득하는 시스템을 구현합니다.",
+            "dependencies": [
+              "4.1"
+            ],
+            "details": "적 처치 이벤트 감지, 적 유형별 경험치 값 설정, 경험치 획득 시 시각적 피드백(경험치 텍스트 표시), Experience 클래스와의 연동, 경험치 획득 사운드 효과 준비",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "레벨업 감지 및 게임 일시정지 시스템 구현",
+            "description": "경험치가 충분할 때 레벨업을 감지하고 게임을 일시정지하는 시스템을 구현합니다.",
+            "dependencies": [
+              "4.2"
+            ],
+            "details": "레벨업 조건 체크 로직, 레벨업 발생 시 게임 상태 일시정지, 레벨업 알림 시스템, 게임 루프 일시정지/재개 메커니즘, 레벨업 사운드 및 시각 효과",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "아이템 선택 UI 시스템 구현",
+            "description": "레벨업 시 표시되는 아이템 선택 인터페이스를 구현합니다.",
+            "dependencies": [
+              "4.3"
+            ],
+            "details": "아이템 선택 UI 패널 생성, 2개의 무작위 아이템 선택지 표시 로직, 아이템 아이콘/이름/설명 렌더링, 마우스 클릭 또는 키보드 입력으로 아이템 선택, 선택 시 하이라이트 효과",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "아이템 선택 완료 및 게임 재개 시스템 구현",
+            "description": "아이템 선택 후 선택된 아이템을 적용하고 게임을 재개하는 시스템을 구현합니다.",
+            "dependencies": [
+              "4.4"
+            ],
+            "details": "선택된 아이템 인벤토리 추가, 아이템 효과 즉시 적용, 아이템 선택 UI 닫기, 게임 상태 재개, 레벨업 완료 시각적 피드백, 새로운 레벨에 맞는 경험치바 업데이트",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 5,
@@ -245,7 +444,50 @@
           5
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "시너지 매니저 클래스 및 조합 검사 로직 구현",
+            "description": "Synergy 매니저 클래스를 구현하고 아이템 조합을 검사하는 로직을 개발합니다.",
+            "dependencies": [],
+            "details": "SynergyManager 클래스 생성, 아이템 조합 데이터 구조 설계 (축구공+축구화, 야구배트+농구화), 현재 보유 아이템을 검사하여 시너지 조합 감지하는 로직 구현. 시너지 ID와 필요 아이템 리스트를 관리하는 시스템.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "시너지 효과 구현",
+            "description": "각 시너지별 고유 효과를 구현합니다.",
+            "dependencies": [
+              "6.1"
+            ],
+            "details": "축구공+축구화 시너지: 축구공 데미지 30% 증가 효과 구현. 야구배트+농구화 시너지: 점프 착지 시 야구배트 자동 1회 휘두르기 효과 구현. 효과별 독립적인 처리 로직과 스탯 수정 시스템.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "시너지 활성화/비활성화 시스템 구현",
+            "description": "시너지 상태를 관리하고 실시간으로 적용/해제하는 시스템을 구현합니다.",
+            "dependencies": [
+              "6.2"
+            ],
+            "details": "아이템 획득/제거 시 시너지 상태 재검사, 시너지 활성화 시 효과 적용, 시너지 비활성화 시 효과 해제. 시너지 상태 플래그 관리, 중복 적용 방지 로직, 아이템 인벤토리와 연동하여 실시간 업데이트.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "시너지 상태 UI 표시 시스템 구현",
+            "description": "활성화된 시너지를 플레이어에게 표시하는 UI 시스템을 구현합니다.",
+            "dependencies": [
+              "6.3"
+            ],
+            "details": "시너지 상태 표시 영역을 HUD에 추가, 활성화된 시너지 아이콘 및 설명 표시, 시너지 효과 툴팁 시스템, 시너지 활성화/비활성화 시각적 피드백(애니메이션, 색상 변화). 시너지 조합 가이드 UI 구현.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 7,
@@ -258,7 +500,62 @@
           3
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "게임 타이머 시스템 구현",
+            "description": "게임 시작부터의 경과 시간을 추적하고 관리하는 타이머 시스템을 구현합니다.",
+            "dependencies": [],
+            "details": "게임 시작 시간 기록, 실시간 경과 시간 계산, 분/초 단위 시간 표시, 특정 시간 간격 이벤트 트리거를 위한 타이머 체크 함수 구현. GameTimer 클래스 생성하여 게임 전반의 시간 관리 담당.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "DifficultyManager 클래스 구현",
+            "description": "시간에 따른 난이도 증가를 관리하는 핵심 시스템을 구현합니다.",
+            "dependencies": [
+              "7.1"
+            ],
+            "details": "DifficultyManager 클래스 생성, 시간 구간별 난이도 단계 정의(5분, 10분 구간), 적 스탯 배율 계산 함수, 난이도 변경 이벤트 처리 시스템. 현재 난이도 레벨 추적 및 다음 증가 시점 계산 기능.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "적 능력치 동적 조정 시스템 구현",
+            "description": "시간에 따라 적들의 공격력, 이동속도, 공격속도, 투사체 속도를 동적으로 증가시키는 시스템을 구현합니다.",
+            "dependencies": [
+              "7.2"
+            ],
+            "details": "5분마다 적 공격속도 및 투사체속도 30% 증가, 5분 시점에 공격력/이동속도 1.6배, 10분 시점에 2.0배 증가 로직. 기존 적과 새로 생성되는 적 모두에게 적용되는 스탯 업데이트 시스템. 적 클래스에 스탯 배율 적용 함수 추가.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "교장선생님 특별 등장 시스템 구현",
+            "description": "특정 시간 간격마다 강력한 보스급 적인 교장선생님이 등장하는 시스템을 구현합니다.",
+            "dependencies": [
+              "7.2"
+            ],
+            "details": "교장선생님 클래스 생성(일반 적보다 높은 체력, 공격력, 특별 패턴), 특정 시간 간격(예: 7분, 15분)마다 자동 등장, 등장 시 특별 효과 및 경고 메시지, 처치 시 높은 경험치 보상. 보스 등장 타이밍 관리 시스템.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "난이도 증가 시각적 피드백 시스템 구현",
+            "description": "플레이어가 난이도 변화를 인지할 수 있도록 시각적, 청각적 피드백을 제공하는 시스템을 구현합니다.",
+            "dependencies": [
+              "7.3",
+              "7.4"
+            ],
+            "details": "난이도 증가 시 화면 효과(플래시, 색상 변화), 알림 메시지 표시('위험도 증가!', '적들이 강해졌습니다!'), 현재 난이도 단계 UI 표시, 교장선생님 등장 시 경고음 및 특별 연출. HUD에 현재 위험도 레벨 표시 기능 추가.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 8,
@@ -271,7 +568,50 @@
           2
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "압정 함정 생성 타이머 시스템 구현",
+            "description": "게임 시작 3분 후부터 압정 함정을 생성하는 타이머 시스템을 구현합니다.",
+            "dependencies": [],
+            "details": "게임 시작 시간 추적, 3분(180초) 경과 체크, 함정 생성 주기 설정, 타이머 기반 함정 생성 트리거 구현. GameTimer 또는 기존 게임루프의 시간 시스템을 활용하여 정확한 시간 관리.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Trap 클래스 및 압정 함정 오브젝트 구현",
+            "description": "압정 함정의 기본 클래스와 무작위 위치 생성 시스템을 구현합니다.",
+            "dependencies": [
+              "8.1"
+            ],
+            "details": "Trap 기본 클래스 생성, 압정 함정 서브클래스(Tack), 게임 맵 내 무작위 위치 생성 알고리즘, 함정 렌더링 시스템, 함정 생명주기 관리(영구 또는 시간제한). 맵 경계 내 유효 위치 체크 포함.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "플레이어-함정 충돌 감지 및 디버프 적용 시스템",
+            "description": "플레이어가 압정 함정을 밟았을 때의 충돌 감지와 이동속도 감소 효과를 구현합니다.",
+            "dependencies": [
+              "8.2"
+            ],
+            "details": "플레이어-함정 충돌 감지(rect 또는 원형 충돌), 디버프 효과 클래스 구현, 3초간 이동속도 20% 감소 효과 적용, 디버프 타이머 관리, 플레이어 상태 시스템에 디버프 통합. 적은 함정에 영향받지 않도록 필터링.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "디버프 중첩 시스템 및 시각적 피드백 구현",
+            "description": "최대 3회 중첩되는 디버프 시스템과 함정 및 디버프 상태의 시각적 표시를 구현합니다.",
+            "dependencies": [
+              "8.3"
+            ],
+            "details": "디버프 중첩 관리 시스템(최대 3회, 총 60% 감소), 중첩된 디버프 시간 관리, 함정 스프라이트 및 애니메이션, 플레이어 디버프 상태 시각적 표시, HUD에 디버프 아이콘 및 지속시간 표시, 디버프 해제 시 시각적 피드백.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 9,
