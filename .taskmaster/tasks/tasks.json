@@ -117,7 +117,7 @@
               "2.1"
             ],
             "details": "마우스와 플레이어 간 각도 계산, 스프라이트 회전 적용, 부드러운 회전 애니메이션, 회전 각도 정규화 및 최적화",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -831,7 +831,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-08-06T12:10:09.359Z",
+      "updated": "2025-08-06T12:35:44.756Z",
       "description": "Tasks for master context"
     }
   }

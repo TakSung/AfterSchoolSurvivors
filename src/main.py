@@ -24,8 +24,10 @@ FPS = 60
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.original_image = pygame.Surface((50, 50))
-        self.original_image.fill((0, 255, 0))  # Green square for now
+        # Create a transparent surface for the original image
+        self.original_image = pygame.Surface((50, 50), pygame.SRCALPHA)
+        # Draw a triangle pointing right (0 degrees)
+        pygame.draw.polygon(self.original_image, (0, 255, 0), [(50, 25), (0, 0), (0, 50)])
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         self.health = 100
@@ -42,7 +44,7 @@ class Player(pygame.sprite.Sprite):
         angle = direction.angle_to(pygame.math.Vector2(1, 0))
 
         # Rotate the original image to avoid quality loss
-        self.image = pygame.transform.rotate(self.original_image, -angle) # Negative angle because y-axis is inverted
+        self.image = pygame.transform.rotate(self.original_image, angle) # The angle is calculated correctly, no need to negate
         self.rect = self.image.get_rect(center=self.rect.center)
         # --- End Rotation Logic ---
 
