@@ -50,7 +50,7 @@
               "1.3"
             ],
             "details": "pygame.time.Clock() 생성, while 게임루프, event 처리, update() 메서드, draw() 메서드, FPS 60 제한, quit 이벤트 처리",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {

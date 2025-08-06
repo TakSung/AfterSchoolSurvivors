@@ -16,6 +16,10 @@ pygame.display.set_caption("After School Survivors")
 # Basic background color
 BLACK = (0, 0, 0)
 
+# Clock for FPS
+clock = pygame.time.Clock()
+FPS = 60
+
 # Game loop
 running = True
 while running:
@@ -24,11 +28,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # Fill the background
+    # Update game state
+    # (This is where game logic will go)
+
+    # Draw everything
     screen.fill(BLACK)
+    # (This is where drawing code will go)
 
     # Update the display
     pygame.display.flip()
+
+    # Cap the frame rate
+    clock.tick(FPS)
 
 # Quit Pygame
 pygame.quit()
