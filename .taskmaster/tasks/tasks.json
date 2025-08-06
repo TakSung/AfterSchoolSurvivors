@@ -9,7 +9,7 @@
         "testStrategy": "게임 윈도우가 정상적으로 실행되고 안정적인 프레임레이트를 유지하는지 확인. 키보드/마우스 입력 처리 테스트.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -17,7 +17,7 @@
             "description": "Python 3.13+ 버전으로 가상환경을 생성하고 활성화합니다.",
             "dependencies": [],
             "details": "python -m venv venv 명령으로 가상환경 생성, 가상환경 활성화 스크립트 실행, Python 버전 확인 및 pip 업그레이드",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -28,7 +28,7 @@
               "1.1"
             ],
             "details": "src/, assets/, tests/ 폴더 생성, requirements.txt에 pygame>=2.5.0 추가, pip install -r requirements.txt로 의존성 설치",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -39,7 +39,7 @@
               "1.2"
             ],
             "details": "pygame.init(), 게임 윈도우 생성(800x600), 윈도우 제목 설정, 아이콘 설정, 기본 배경색 설정, pygame.display.update() 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
