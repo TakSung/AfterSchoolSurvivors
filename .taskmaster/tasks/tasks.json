@@ -61,7 +61,7 @@
               "1.4"
             ],
             "details": "pygame.event.get() 처리, 키보드 입력 감지(KEYDOWN, KEYUP), 마우스 위치 및 클릭 감지, ESC 키로 게임 종료 기능",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -831,7 +831,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-08-06T10:05:12.101Z",
+      "updated": "2025-08-06T12:08:11.160Z",
       "description": "Tasks for master context"
     }
   }
