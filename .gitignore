@@ -226,7 +226,11 @@ node_modules/
 # OS specific
 .DS_Store
 
+.cursor/mcp.json
+
 # Task files
 # tasks.json
 # tasks/ 
-.cursor/mcp.json
+
+.mcp.json
+.taskmaster/config.json

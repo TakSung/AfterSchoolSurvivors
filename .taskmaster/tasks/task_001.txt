@@ -1,0 +1,49 @@
+# Task ID: 1
+# Title: 프로젝트 환경 설정 및 기본 Pygame 프레임워크 구현
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Python 3.13+ 환경에서 Pygame을 이용한 기본 게임 프레임워크와 메인 게임 루프를 구현합니다.
+# Details:
+가상환경 생성, Pygame 설치, 기본 게임 윈도우(800x600) 생성, 메인 게임 루프(init, update, draw, event handling), FPS 제한(60fps), 기본 리소스 매니저 클래스 구현. requirements.txt 파일 생성 및 프로젝트 폴더 구조 설정.
+
+# Test Strategy:
+게임 윈도우가 정상적으로 실행되고 안정적인 프레임레이트를 유지하는지 확인. 키보드/마우스 입력 처리 테스트.
+
+# Subtasks:
+## 1. Python 3.13+ 가상환경 설정 [pending]
+### Dependencies: None
+### Description: Python 3.13+ 버전으로 가상환경을 생성하고 활성화합니다.
+### Details:
+python -m venv venv 명령으로 가상환경 생성, 가상환경 활성화 스크립트 실행, Python 버전 확인 및 pip 업그레이드
+
+## 2. 프로젝트 폴더 구조 및 의존성 설정 [pending]
+### Dependencies: 1.1
+### Description: 프로젝트 디렉토리 구조를 생성하고 requirements.txt 파일을 작성합니다.
+### Details:
+src/, assets/, tests/ 폴더 생성, requirements.txt에 pygame>=2.5.0 추가, pip install -r requirements.txt로 의존성 설치
+
+## 3. Pygame 기본 윈도우 및 초기화 시스템 구현 [pending]
+### Dependencies: 1.2
+### Description: 800x600 크기의 게임 윈도우를 생성하고 Pygame을 초기화합니다.
+### Details:
+pygame.init(), 게임 윈도우 생성(800x600), 윈도우 제목 설정, 아이콘 설정, 기본 배경색 설정, pygame.display.update() 구현
+
+## 4. 메인 게임 루프 프레임워크 구현 [pending]
+### Dependencies: 1.3
+### Description: 60 FPS 제한과 함께 기본 게임 루프를 구현합니다.
+### Details:
+pygame.time.Clock() 생성, while 게임루프, event 처리, update() 메서드, draw() 메서드, FPS 60 제한, quit 이벤트 처리
+
+## 5. 입력 처리 시스템 구현 [pending]
+### Dependencies: 1.4
+### Description: 키보드와 마우스 입력을 처리하는 시스템을 구현합니다.
+### Details:
+pygame.event.get() 처리, 키보드 입력 감지(KEYDOWN, KEYUP), 마우스 위치 및 클릭 감지, ESC 키로 게임 종료 기능
+
+## 6. 기본 리소스 매니저 클래스 구현 [pending]
+### Dependencies: 1.4
+### Description: 이미지, 사운드 등 게임 리소스를 관리하는 ResourceManager 클래스를 구현합니다.
+### Details:
+ResourceManager 클래스 생성, 이미지 로딩/캐싱 시스템, 사운드 로딩 시스템, 리소스 경로 관리, 싱글톤 패턴 적용
+

@@ -1,0 +1,55 @@
+# Task ID: 5
+# Title: 아이템 시스템 및 인벤토리 구현
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: 7종 아이템(무기 3종, 능력 4종)과 6칸 슬롯 시스템을 구현합니다.
+# Details:
+Item 베이스 클래스 및 7개 아이템 클래스 구현. 무기: 축구공, 농구공, 야구배트. 능력: 축구화, 농구화, 홍삼, 우유. Inventory 클래스(6칸 제한), 동일 아이템 획득 시 레벨업 로직(최대 5레벨), 각 아이템별 레벨별 효과 정의. 아이템 효과 적용 시스템(스탯 버프, 공격 강화 등).
+
+# Test Strategy:
+아이템 획득, 슬롯 배치, 동일 아이템 레벨업, 각 아이템 효과 적용 확인. 인벤토리 가득 찬 상황 처리 테스트.
+
+# Subtasks:
+## 1. Item 베이스 클래스 및 아이템 타입 열거형 정의 [pending]
+### Dependencies: None
+### Description: 아이템 시스템의 핵심이 되는 베이스 클래스와 아이템 타입들을 정의합니다.
+### Details:
+Item 추상 베이스 클래스 구현 (id, name, type, level, max_level, description 속성), ItemType 열거형 정의 (WEAPON, ABILITY), ItemID 열거형 정의 (7개 아이템), 아이템 레벨별 효과 계산을 위한 추상 메서드 정의 (get_effect, apply_effect)
+
+## 2. 무기 아이템 클래스 구현 (축구공, 농구공, 야구배트) [pending]
+### Dependencies: 5.1
+### Description: 3종의 무기 아이템 클래스를 구현하여 각각 고유한 공격 효과를 제공합니다.
+### Details:
+WeaponItem 베이스 클래스 구현, SoccerBall 클래스 (투사체 속도 증가, 레벨당 10% 증가), BasketballItem 클래스 (투사체 크기 증가, 레벨당 15% 증가), BaseballBat 클래스 (공격력 증가, 레벨당 20% 증가), 각 무기별 레벨별 효과 테이블 정의
+
+## 3. 능력 아이템 클래스 구현 (축구화, 농구화, 홍삼, 우유) [pending]
+### Dependencies: 5.1
+### Description: 4종의 능력 아이템 클래스를 구현하여 플레이어 스탯을 강화합니다.
+### Details:
+AbilityItem 베이스 클래스 구현, SoccerShoes 클래스 (이동속도 증가, 레벨당 8% 증가), BasketballShoes 클래스 (점프력/회피 증가, 레벨당 10% 증가), RedGinseng 클래스 (최대체력 증가, 레벨당 25hp 증가), Milk 클래스 (체력재생 속도 증가, 레벨당 초당 2hp 증가), 각 능력별 레벨별 효과 테이블 정의
+
+## 4. Inventory 클래스 및 6칸 슬롯 시스템 구현 [pending]
+### Dependencies: 5.1
+### Description: 6개 슬롯으로 제한된 인벤토리 시스템을 구현합니다.
+### Details:
+Inventory 클래스 구현 (6개 슬롯 배열), add_item 메서드 (동일 아이템 레벨업 로직 포함), remove_item 메서드, get_item 메서드, is_full 속성, get_items_by_type 메서드, 슬롯 인덱스 관리 시스템, 인벤토리 직렬화/역직렬화 기능
+
+## 5. 아이템 레벨업 시스템 구현 (최대 5레벨) [pending]
+### Dependencies: 5.2, 5.3, 5.4
+### Description: 동일한 아이템 획득 시 레벨업하는 시스템을 구현합니다.
+### Details:
+레벨업 로직 구현 (동일 아이템 획득 시 level+1), 최대 레벨 제한 (5레벨), 레벨업 불가능 시 처리 로직, level_up 메서드 구현, can_level_up 메서드 구현, 레벨업 시 이펙트 생성 시스템, 레벨별 효과 증가 공식 적용
+
+## 6. 아이템 효과 적용 시스템 구현 [pending]
+### Dependencies: 5.5
+### Description: 플레이어에게 아이템 효과를 실시간으로 적용하는 시스템을 구현합니다.
+### Details:
+ItemEffectManager 클래스 구현, 플레이어 스탯에 아이템 효과 적용 로직, apply_all_effects 메서드 (인벤토리 전체 아이템 효과 계산), remove_effects 메서드, 무기 아이템 효과 적용 (투사체 속성 변경), 능력 아이템 효과 적용 (플레이어 스탯 버프), 실시간 효과 업데이트 시스템
+
+## 7. 인벤토리 가득 참 예외 처리 및 아이템 획득 시스템 [pending]
+### Dependencies: 5.6
+### Description: 인벤토리가 가득 찬 상황의 예외 처리와 아이템 획득 플로우를 구현합니다.
+### Details:
+InventoryFullException 커스텀 예외 클래스 정의, 아이템 획득 시 인벤토리 상태 확인 로직, 가득 찬 상황에서 동일 아이템 레벨업 우선 처리, 새 아이템 획득 불가 시 알림 시스템, 아이템 드롭 처리 (필요 시), 아이템 획득 우선순위 시스템 (레벨업 > 새 아이템), 전체 아이템 시스템 통합 테스트
+
