@@ -32,8 +32,23 @@ class Player(pygame.sprite.Sprite):
         self.attack_speed = 1.0  # Attacks per second
 
     def update(self):
-        # Player logic will go here
-        pass
+        mouse_pos = pygame.mouse.get_pos()
+        target_vector = pygame.math.Vector2(mouse_pos)
+        current_vector = pygame.math.Vector2(self.rect.center)
+
+        # Smooth movement using linear interpolation (lerp)
+        # A smaller fraction results in smoother, slower following
+        self.rect.center = current_vector.lerp(target_vector, 0.05)
+
+        # Keep player on screen
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > SCREEN_WIDTH:
+            self.rect.right = SCREEN_WIDTH
+        if self.rect.top <= 0:
+            self.rect.top = 0
+        if self.rect.bottom >= SCREEN_HEIGHT:
+            self.rect.bottom = SCREEN_HEIGHT
 
 # Create player group and player instance
 all_sprites = pygame.sprite.Group()

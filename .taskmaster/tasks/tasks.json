@@ -106,7 +106,7 @@
               "2.1"
             ],
             "details": "마우스 위치 감지, 플레이어와 마우스 간 거리 계산, 선형 보간을 이용한 부드러운 이동, 이동 속도 조절, 화면 경계 충돌 방지",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -831,7 +831,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-08-06T12:09:02.410Z",
+      "updated": "2025-08-06T12:10:09.359Z",
       "description": "Tasks for master context"
     }
   }
