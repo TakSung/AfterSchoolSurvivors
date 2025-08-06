@@ -14,7 +14,7 @@
 ## 1. Python 3.13+ 가상환경 설정 [pending]
 ### Dependencies: None
 ### Description: Python 3.13+ 버전으로 가상환경을 생성하고 활성화합니다.
-### Details:
+### Detail
 python -m venv venv 명령으로 가상환경 생성, 가상환경 활성화 스크립트 실행, Python 버전 확인 및 pip 업그레이드
 
 ## 2. 프로젝트 폴더 구조 및 의존성 설정 [pending]
