@@ -1,6 +1,6 @@
 {
 	"meta": {
-		"generatedAt": "2025-08-06T10:21:03.398Z",
+		"generatedAt": "2025-08-06T10:29:58.427Z",
 		"tasksAnalyzed": 10,
 		"totalTasks": 10,
 		"analysisCount": 10,
@@ -14,80 +14,80 @@
 			"taskTitle": "프로젝트 환경 설정 및 기본 Pygame 프레임워크 구현",
 			"complexityScore": 4,
 			"recommendedSubtasks": 6,
-			"expansionPrompt": "Python 3.13+ 환경 설정부터 기본 Pygame 게임 프레임워크 구축까지의 초기 설정 작업을 체계적으로 분할하여 구현하세요. 가상환경 설정, 의존성 관리, 기본 게임 루프, 리소스 관리자 등을 단계별로 나누어 각각을 독립적인 서브태스크로 구성하세요.",
-			"reasoning": "프로젝트 초기 설정 작업으로 비교적 표준적인 절차이지만 여러 구성 요소(환경 설정, 게임 루프, 리소스 관리자 등)가 포함되어 있어 중간 복잡도입니다."
+			"expansionPrompt": "Python 3.13+ 환경 설정부터 기본 Pygame 게임 루프까지의 전체 개발 환경 구축 과정을 단계별로 세분화하여, 각 단계마다 독립적으로 테스트 가능한 작업 단위로 나누어 주세요.",
+			"reasoning": "기본적인 환경 설정과 프레임워크 구현으로 복잡도는 중간 정도이며, 이미 6개의 적절한 서브태스크로 구성되어 있어 추가 확장이 불필요합니다."
 		},
 		{
 			"taskId": 2,
 			"taskTitle": "플레이어 캐릭터 시스템 구현",
 			"complexityScore": 6,
 			"recommendedSubtasks": 7,
-			"expansionPrompt": "플레이어 캐릭터의 핵심 기능들을 세분화하여 구현하세요. 마우스 추적 이동 시스템, 캐릭터 회전, 자동 공격 시스템, 체력 관리, 스프라이트 렌더링 등을 각각 독립적인 서브태스크로 나누어 단계별로 개발하세요.",
-			"reasoning": "게임의 핵심 플레이어 시스템으로 마우스 추적, 자동 공격, 체력 시스템 등 여러 복잡한 로직이 필요하여 중상급 복잡도입니다."
+			"expansionPrompt": "플레이어의 마우스 추적 이동, 자동 공격, 체력 관리, 스프라이트 렌더링 등 복합적인 시스템들을 각각 독립적으로 구현하고 통합하는 과정으로 세분화해 주세요.",
+			"reasoning": "마우스 추적, 자동 공격, 체력 시스템 등 여러 시스템이 통합된 중간 복잡도의 작업으로, 현재 7개의 서브태스크가 적절하게 구성되어 있습니다."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "적 캐릭터 시스템 및 AI 구현",
+			"complexityScore": 8,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Enemy 베이스 클래스부터 3종류의 개별 적 캐릭터 구현, AI 로직, 스포너 시스템, 충돌 감지까지 복잡한 적 시스템을 체계적으로 구현하는 과정으로 세분화해 주세요.",
+			"reasoning": "3종류의 서로 다른 적 캐릭터와 각각의 고유 AI 패턴, 스포너 시스템, 충돌 감지 등이 포함된 고복잡도 작업으로, 현재 8개의 서브태스크가 적절합니다."
 		},
 		{
 			"taskId": 4,
 			"taskTitle": "경험치 및 레벨업 시스템 구현",
-			"complexityScore": 5,
+			"complexityScore": 6,
 			"recommendedSubtasks": 5,
-			"expansionPrompt": "경험치 획득부터 레벨업 시 아이템 선택까지의 전체 레벨링 시스템을 구현하세요. 경험치 계산 로직, 레벨업 공식, 게임 일시정지 기능, 아이템 선택 UI, 게임 재개 등을 단계별로 나누어 개발하세요.",
-			"reasoning": "게임플레이의 핵심 진행 시스템이지만 상대적으로 명확한 요구사항을 가진 중간 복잡도의 작업입니다."
+			"expansionPrompt": "경험치 획득부터 레벨업 감지, 아이템 선택 UI, 게임 일시정지/재개까지의 전체 레벨업 플로우를 순차적으로 구현하는 과정으로 세분화해 주세요.",
+			"reasoning": "경험치 시스템과 UI 통합이 필요한 중간 복잡도 작업으로, 현재 5개의 서브태스크가 적절하게 구성되어 있습니다."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "아이템 시스템 및 인벤토리 구현",
+			"complexityScore": 7,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Item 베이스 클래스부터 7종의 개별 아이템 구현, 인벤토리 관리, 레벨업 시스템, 효과 적용까지 포함하는 복합적인 아이템 시스템을 단계별로 구현해 주세요.",
+			"reasoning": "7종의 아이템과 각각의 고유 효과, 인벤토리 시스템, 레벨업 로직 등이 포함된 높은 복잡도의 작업으로, 현재 7개의 서브태스크가 적절합니다."
 		},
 		{
 			"taskId": 6,
 			"taskTitle": "아이템 시너지 시스템 구현",
-			"complexityScore": 4,
+			"complexityScore": 5,
 			"recommendedSubtasks": 4,
-			"expansionPrompt": "아이템 조합 시 발동되는 시너지 효과 시스템을 구현하세요. 시너지 조합 검사 로직, 각 시너지별 효과 구현, 시너지 활성화/비활성화 시스템, UI 표시 등을 단계별로 나누어 개발하세요.",
-			"reasoning": "비교적 제한된 시너지 조합(2개)이므로 중하급 복잡도이며, 명확한 요구사항을 가지고 있습니다."
+			"expansionPrompt": "시너지 조합 검사부터 효과 적용, UI 표시까지의 시너지 시스템을 단계별로 구현하는 과정으로 세분화해 주세요.",
+			"reasoning": "특정 아이템 조합에 따른 시너지 효과를 관리하는 중간 정도의 복잡도 작업으로, 현재 4개의 서브태스크가 적절합니다."
 		},
 		{
 			"taskId": 7,
 			"taskTitle": "난이도 곡선 및 적 강화 시스템 구현",
-			"complexityScore": 5,
+			"complexityScore": 6,
 			"recommendedSubtasks": 5,
-			"expansionPrompt": "시간 기반 난이도 증가 시스템을 구현하세요. 게임 타이머, 시간별 적 능력치 증가 로직, 교장선생님 특별 등장 시스템, 적 스탯 동적 조정 등을 단계별로 나누어 개발하세요.",
-			"reasoning": "시간 기반 난이도 시스템으로 여러 시간 단계와 다양한 적 능력치 조정이 필요하여 중간 복잡도입니다."
+			"expansionPrompt": "게임 타이머부터 시간별 난이도 증가, 적 스탯 동적 조정, 보스 등장 시스템까지 시간 기반 난이도 시스템을 순차적으로 구현해 주세요.",
+			"reasoning": "시간 기반 난이도 조정과 적 스탯 동적 변경이 포함된 중간 복잡도 작업으로, 현재 5개의 서브태스크가 적절합니다."
 		},
 		{
 			"taskId": 8,
 			"taskTitle": "함정 시스템 구현",
 			"complexityScore": 4,
 			"recommendedSubtasks": 4,
-			"expansionPrompt": "3분 후 등장하는 압정 함정 시스템을 구현하세요. 함정 생성 타이머, 무작위 위치 생성, 플레이어 충돌 감지, 디버프 효과(중첩 포함), 시각적 표시 등을 단계별로 나누어 개발하세요.",
-			"reasoning": "비교적 단순한 함정 시스템이지만 타이머, 충돌 감지, 디버프 중첩 등의 로직이 필요하여 중하급 복잡도입니다."
-		},
-		{
-			"taskId": 3,
-			"taskTitle": "적 캐릭터 시스템 및 AI 구현",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on 적 캐릭터 시스템 및 ai 구현.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 5,
-			"taskTitle": "아이템 시스템 및 인벤토리 구현",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on 아이템 시스템 및 인벤토리 구현.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
+			"expansionPrompt": "함정 생성 타이머부터 충돌 감지, 디버프 효과, 시각적 피드백까지 함정 시스템의 전체 기능을 단계별로 구현해 주세요.",
+			"reasoning": "압정 함정과 디버프 효과라는 비교적 단순한 메커니즘으로 구성된 중간 정도의 복잡도 작업이며, 현재 4개의 서브태스크가 적절합니다."
 		},
 		{
 			"taskId": 9,
 			"taskTitle": "게임 UI/UX 및 화면 시스템 구현",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on 게임 ui/ux 및 화면 시스템 구현.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
+			"complexityScore": 7,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "화면 관리 시스템부터 각각의 화면(메인메뉴, 게임플레이, 게임오버), HUD 시스템, UI 애니메이션까지 전체 사용자 인터페이스를 체계적으로 구현해 주세요.",
+			"reasoning": "여러 화면과 HUD, 다양한 UI 요소들이 포함된 높은 복잡도의 작업으로, 현재 8개의 서브태스크가 적절하게 구성되어 있습니다."
 		},
 		{
 			"taskId": 10,
 			"taskTitle": "성능 최적화 및 게임 완성도 향상",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on 성능 최적화 및 게임 완성도 향상.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
+			"complexityScore": 8,
+			"recommendedSubtasks": 9,
+			"expansionPrompt": "성능 프로파일링부터 렌더링 최적화, 메모리 관리, 사운드/파티클 시스템, 밸런싱, 버그 수정까지 게임의 전반적인 완성도를 높이는 모든 과정을 체계적으로 진행해 주세요.",
+			"reasoning": "성능 최적화, 사운드, 파티클, 밸런싱 등 다양한 영역의 작업이 포함된 가장 높은 복잡도의 작업으로, 현재 9개의 서브태스크가 적절합니다."
 		}
 	]
 }

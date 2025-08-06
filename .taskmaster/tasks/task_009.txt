@@ -1,0 +1,61 @@
+# Task ID: 9
+# Title: 게임 UI/UX 및 화면 시스템 구현
+# Status: pending
+# Dependencies: 4, 5
+# Priority: medium
+# Description: 게임 화면, HUD, 메뉴, 게임오버 화면 등 사용자 인터페이스를 구현합니다.
+# Details:
+GameScreen 매니저 구현(메인메뉴, 게임플레이, 게임오버), HUD 시스템(체력바, 경험치바, 레벨, 생존시간, 아이템 슬롯 표시), 아이템 선택 UI, 게임오버 화면(생존시간 기록, 재시작 버튼). 재도전 욕구를 불러일으키는 메시지 시스템, 키보드 단축키(ESC, R 등).
+
+# Test Strategy:
+각 화면 전환, HUD 정보 실시간 업데이트, 아이템 선택 UI 동작, 게임오버 후 재시작 기능 확인.
+
+# Subtasks:
+## 1. GameScreen 매니저 및 화면 전환 시스템 구현 [pending]
+### Dependencies: None
+### Description: 게임의 여러 화면(메인메뉴, 게임플레이, 게임오버)을 관리하는 GameScreen 매니저와 화면 전환 시스템을 구현합니다.
+### Details:
+ScreenManager 클래스 생성, 화면 상태 열거형 정의(MAIN_MENU, GAMEPLAY, GAME_OVER), 화면 전환 메서드 구현, 각 화면별 update/draw 메서드 라우팅
+
+## 2. 메인 메뉴 화면 구현 [pending]
+### Dependencies: 9.1
+### Description: 게임 시작 화면과 메인 메뉴 UI를 구현하고 게임 시작 기능을 연결합니다.
+### Details:
+MainMenuScreen 클래스 구현, 게임 제목 및 시작 버튼 UI, 키보드 입력 처리(Enter, Space), 게임 시작 시 GameScreen으로 전환, 배경 및 간단한 애니메이션 효과
+
+## 3. HUD 시스템 구현 - 체력바, 경험치바, 레벨 표시 [pending]
+### Dependencies: 9.1
+### Description: 플레이어의 상태를 실시간으로 표시하는 HUD 시스템의 핵심 요소들을 구현합니다.
+### Details:
+HUDManager 클래스 생성, 체력바 UI(현재/최대 체력 시각화), 경험치바 UI(현재/다음레벨 경험치), 레벨 숫자 표시, 실시간 데이터 바인딩 시스템
+
+## 4. 생존시간 및 아이템 슬롯 UI 구현 [pending]
+### Dependencies: 9.3
+### Description: 플레이어의 생존 시간과 보유 아이템을 표시하는 UI 시스템을 구현합니다.
+### Details:
+생존시간 타이머 UI(분:초 형식), 아이템 슬롯 UI(최대 6개), 아이템 아이콘 및 레벨 표시, 시너지 상태 표시 아이콘, 동적 UI 업데이트 시스템
+
+## 5. 레벨업 아이템 선택 UI 구현 [pending]
+### Dependencies: 9.1
+### Description: 레벨업 시 나타나는 아이템 선택 화면과 상호작용을 구현합니다.
+### Details:
+ItemSelectionScreen 클래스, 게임 일시정지 기능, 2개 아이템 선택지 UI, 아이템 정보 표시(이름, 설명, 아이콘), 마우스/키보드 선택 처리, 선택 후 게임 재개
+
+## 6. 게임오버 화면 및 결과 표시 구현 [pending]
+### Dependencies: 9.1, 9.4
+### Description: 플레이어 사망 시 나타나는 게임오버 화면과 플레이 결과를 구현합니다.
+### Details:
+GameOverScreen 클래스, 최종 생존시간 표시, 처치한 적 수 통계, 달성 레벨 표시, 재도전 욕구를 불러일으키는 메시지 시스템, 시각적 효과 및 애니메이션
+
+## 7. 재시작 및 키보드 단축키 시스템 구현 [pending]
+### Dependencies: 9.6
+### Description: 게임 재시작 기능과 키보드 단축키를 구현하여 사용자 편의성을 향상시킵니다.
+### Details:
+재시작 버튼 UI 및 기능, 키보드 단축키 시스템(ESC: 메인메뉴, R: 재시작, Space: 일시정지), 게임 상태 초기화 로직, 단축키 도움말 표시
+
+## 8. UI 애니메이션 및 시각적 피드백 구현 [pending]
+### Dependencies: 9.3, 9.4, 9.5, 9.6
+### Description: UI 요소들의 애니메이션과 시각적 피드백을 추가하여 게임의 사용자 경험을 향상시킵니다.
+### Details:
+체력 감소/회복 애니메이션, 경험치바 채워지는 효과, 레벨업 시 UI 반짝임 효과, 아이템 획득 알림 애니메이션, 버튼 호버/클릭 효과, 화면 전환 페이드 효과
+
