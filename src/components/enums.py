@@ -17,36 +17,38 @@ class EnemyType(IntEnum):
     KOREAN_TEACHER = 0  # 국어선생님
     MATH_TEACHER = 1    # 수학선생님  
     PRINCIPAL = 2       # 교장선생님
-    
-    @property
-    def display_name(self) -> str:
-        return self._display_names[self]
-    
-    @property
-    def base_speed(self) -> float:
-        return self._base_speeds[self.value]
-    
-    @property
-    def base_health(self) -> int:
-        return self._base_healths[self.value]
-    
-    @property
-    def base_attack_power(self) -> int:
-        return self._base_attack_powers[self.value]
-    
+
+# AI-DEV : 성능 최적화를 위한 배열 인덱스 기반 조회
+# - 문제: 딕셔너리 조회보다 배열 인덱스 조회가 더 빠름 (게임 성능 중요)
+# - 해결책: enum.value를 인덱스로 사용하는 배열 구조 
+# - 주의사항: enum 순서와 배열 인덱스가 일치해야 함
+
+# 클래스 메서드들을 별도로 정의
+def _get_display_name(enemy_type: EnemyType) -> str:
     _display_names = {
-        KOREAN_TEACHER: "국어선생님",
-        MATH_TEACHER: "수학선생님",
-        PRINCIPAL: "교장선생님"
+        EnemyType.KOREAN_TEACHER: "국어선생님",
+        EnemyType.MATH_TEACHER: "수학선생님",
+        EnemyType.PRINCIPAL: "교장선생님"
     }
-    
-    # AI-DEV : 성능 최적화를 위한 배열 인덱스 기반 조회
-    # - 문제: 딕셔너리 조회보다 배열 인덱스 조회가 더 빠름 (게임 성능 중요)
-    # - 해결책: enum.value를 인덱스로 사용하는 배열 구조 
-    # - 주의사항: enum 순서와 배열 인덱스가 일치해야 함
+    return _display_names[enemy_type]
+
+def _get_base_speed(enemy_type: EnemyType) -> float:
     _base_speeds = [2.0, 4.0, 3.0]        # 국어선생님(느림), 수학선생님(빠름), 교장선생님(중간)
+    return _base_speeds[enemy_type.value]
+
+def _get_base_health(enemy_type: EnemyType) -> int:
     _base_healths = [50, 30, 150]         # 국어선생님(중간), 수학선생님(낮음), 교장선생님(높음)
+    return _base_healths[enemy_type.value]
+
+def _get_base_attack_power(enemy_type: EnemyType) -> int:
     _base_attack_powers = [15, 10, 25]    # 국어선생님(중간), 수학선생님(낮음), 교장선생님(높음)
+    return _base_attack_powers[enemy_type.value]
+
+# 동적으로 프로퍼티 추가
+EnemyType.display_name = property(lambda self: _get_display_name(self))
+EnemyType.base_speed = property(lambda self: _get_base_speed(self))  
+EnemyType.base_health = property(lambda self: _get_base_health(self))
+EnemyType.base_attack_power = property(lambda self: _get_base_attack_power(self))
 
 class EnemyState(IntEnum):
     SPAWNING = 0     # 생성 중

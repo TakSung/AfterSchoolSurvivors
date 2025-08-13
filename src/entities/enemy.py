@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import random
 import math
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union, Optional
 
 from ..core.entity import Entity
 from ..components.enemy_component import EnemyComponent
@@ -31,16 +31,16 @@ class Enemy(ABC):
     
     def __init__(self, enemy_type: EnemyType):
         self.enemy_type = enemy_type
-        self._entity: Entity | None = None
-        self._entity_manager: "EntityManager" | None = None
+        self._entity: Optional[Entity] = None
+        self._entity_manager: Optional["EntityManager"] = None
     
     @property
-    def entity(self) -> Entity | None:
+    def entity(self) -> Optional[Entity]:
         """연결된 엔티티 반환"""
         return self._entity
     
     @property 
-    def entity_manager(self) -> "EntityManager" | None:
+    def entity_manager(self) -> Optional["EntityManager"]:
         """연결된 엔티티 매니저 반환"""
         return self._entity_manager
     
@@ -54,7 +54,7 @@ class Enemy(ABC):
         """각 적 타입별 고유 공격 패턴 데이터 반환"""
         pass
     
-    def create_entity(self, entity_manager: "EntityManager", spawn_x: float | None = None, spawn_y: float | None = None) -> Entity:
+    def create_entity(self, entity_manager: "EntityManager", spawn_x: Optional[float] = None, spawn_y: Optional[float] = None) -> Entity:
         """
         적 엔티티를 생성하고 필요한 컴포넌트들을 추가합니다.
         
