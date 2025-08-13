@@ -128,7 +128,7 @@
               "2.3"
             ],
             "details": "자동 공격 타이머, 투사체 클래스 생성, 발사 방향 계산, 공격 속도 조절, 투사체 생성 및 관리 시스템",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -139,7 +139,7 @@
               "2.1"
             ],
             "details": "체력 감소/증가 메서드, 무적 시간 시스템, 사망 처리, 체력 상태 확인, 체력 관련 이벤트 처리",
-            "status": "pending",
+            "status": "in-progress",
             "testStrategy": ""
           },
           {
@@ -831,7 +831,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-08-06T12:35:44.756Z",
+      "updated": "2025-08-13T11:20:17.195Z",
       "description": "Tasks for master context"
     }
   }
