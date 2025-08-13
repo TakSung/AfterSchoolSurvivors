@@ -27,10 +27,17 @@ FPS = 60
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        # Create a transparent surface for the original image
-        self.original_image = pygame.Surface((50, 50), pygame.SRCALPHA)
-        # Draw a triangle pointing right (0 degrees)
-        pygame.draw.polygon(self.original_image, (0, 255, 0), [(50, 25), (0, 0), (0, 50)])
+        # Load player sprite
+        try:
+            self.original_image = pygame.image.load("assets/player.svg").convert_alpha()
+            self.original_image = pygame.transform.scale(self.original_image, (50, 50))
+        except pygame.error:
+            # Create a fallback surface if the image is not found
+            print("Player sprite 'assets/player.png' not found. Using fallback triangle.")
+            self.original_image = pygame.Surface((50, 50), pygame.SRCALPHA)
+            # Draw a triangle pointing right (0 degrees)
+            pygame.draw.polygon(self.original_image, (0, 255, 0), [(50, 25), (0, 0), (0, 50)])
+        
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         

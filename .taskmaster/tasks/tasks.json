@@ -151,7 +151,7 @@
               "2.3"
             ],
             "details": "2D 도트 스프라이트 로드, 스프라이트 렌더링, 회전된 스프라이트 표시, 애니메이션 프레임 관리, 스프라이트 크기 및 위치 조정",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -831,7 +831,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-08-13T11:21:33.565Z",
+      "updated": "2025-08-13T11:29:50.381Z",
       "description": "Tasks for master context"
     }
   }
