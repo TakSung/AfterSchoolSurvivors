@@ -87,7 +87,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -165,7 +165,7 @@
               "2.6"
             ],
             "details": "모든 시스템 통합, 마우스 추적 이동 테스트, 자동 공격 발사 테스트, 체력 감소 테스트, 경계선 충돌 방지 확인, 성능 최적화",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -831,7 +831,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-08-13T11:29:50.381Z",
+      "updated": "2025-08-13T11:37:43.876Z",
       "description": "Tasks for master context"
     }
   }
