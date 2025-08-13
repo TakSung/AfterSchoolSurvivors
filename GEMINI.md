@@ -1,417 +1,462 @@
-# Task Master AI - Agent Integration Guide
+# CLAUDE.md
 
-## Essential Commands
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-### Core Workflow Commands
+## Development Environment Setup
 
+### Prerequisites
+- Python 3.13+
+- Conda for environment management
+- Anaconda (recommended for environment management)
+
+### Environment Setup
 ```bash
-# Project Setup
-task-master init                                    # Initialize Task Master in current project
-task-master parse-prd .taskmaster/docs/prd.txt      # Generate tasks from PRD document
-task-master models --setup                        # Configure AI models interactively
+# Clone and set up environment
+git clone https://github.com/TakSung/AfterSchoolSurvivors.git
+cd AfterSchoolSurvivors
+conda create -y -n as-game python=3.13
+conda activate as-game
 
-# Daily Development Workflow
-task-master list                                   # Show all tasks with status
-task-master next                                   # Get next available task to work on
-task-master show <id>                             # View detailed task information (e.g., task-master show 1.2)
-task-master set-status --id=<id> --status=done    # Mark task complete
+# Install uv (modern pip replacement)
+# macOS/Linux: curl -LsSf https://astral.sh/uv/install.sh | sh
+# Windows: irm https://astral.sh/uv/install.ps1 | iex
 
-# Task Management
-task-master add-task --prompt="description" --research        # Add new task with AI assistance
-task-master expand --id=<id> --research --force              # Break task into subtasks
-task-master update-task --id=<id> --prompt="changes"         # Update specific task
-task-master update --from=<id> --prompt="changes"            # Update multiple tasks from ID onwards
-task-master update-subtask --id=<id> --prompt="notes"        # Add implementation notes to subtask
-
-# Analysis & Planning
-task-master analyze-complexity --research          # Analyze task complexity
-task-master complexity-report                      # View complexity analysis
-task-master expand --all --research               # Expand all eligible tasks
-
-# Dependencies & Organization
-task-master add-dependency --id=<id> --depends-on=<id>       # Add task dependency
-task-master move --from=<id> --to=<id>                       # Reorganize task hierarchy
-task-master validate-dependencies                            # Check for dependency issues
-task-master generate                                         # Update task markdown files (usually auto-called)
+# Install dependencies
+uv pip install -r requirements.txt
 ```
 
-## Key Files & Project Structure
+## Task Master AI Integration
 
-### Core Files
+This project uses Task Master AI for development workflow management. Key commands:
 
-- `.taskmaster/tasks/tasks.json` - Main task data file (auto-managed)
-- `.taskmaster/config.json` - AI model configuration (use `task-master models` to modify)
-- `.taskmaster/docs/prd.txt` - Product Requirements Document for parsing
-- `.taskmaster/tasks/*.txt` - Individual task files (auto-generated from tasks.json)
-- `.env` - API keys for CLI usage
-
-### Claude Code Integration Files
-
-- `CLAUDE.md` - Auto-loaded context for Claude Code (this file)
-- `.claude/settings.json` - Claude Code tool allowlist and preferences
-- `.claude/commands/` - Custom slash commands for repeated workflows
-- `.mcp.json` - MCP server configuration (project-specific)
-
-### Directory Structure
-
-```
-project/
-├── .taskmaster/
-│   ├── tasks/              # Task files directory
-│   │   ├── tasks.json      # Main task database
-│   │   ├── task-1.md      # Individual task files
-│   │   └── task-2.md
-│   ├── docs/              # Documentation directory
-│   │   ├── prd.txt        # Product requirements
-│   ├── reports/           # Analysis reports directory
-│   │   └── task-complexity-report.json
-│   ├── templates/         # Template files
-│   │   └── example_prd.txt  # Example PRD template
-│   └── config.json        # AI models & settings
-├── .claude/
-│   ├── settings.json      # Claude Code configuration
-│   └── commands/         # Custom slash commands
-├── .env                  # API keys
-├── .mcp.json            # MCP configuration
-└── CLAUDE.md            # This file - auto-loaded by Claude Code
+### Initial Setup
+```bash
+task-master init                    # Initialize Task Master
+task-master parse-prd docs/PRD.md  # Generate tasks from PRD
+task-master analyze-complexity      # Analyze task complexity
+task-master expand --all           # Expand all tasks into subtasks
 ```
 
-## MCP Integration
+### Daily Workflow
+```bash
+task-master list                          # Show all tasks
+task-master next                          # Get next available task
+task-master show <id>                    # View task details
+task-master set-status --id=<id> --status=done  # Mark task complete
+```
 
-Task Master provides an MCP server that Claude Code can connect to. Configure in `.mcp.json`:
+### Task Management
+```bash
+task-master update-subtask --id=<id> --prompt="implementation notes"
+task-master add-task --prompt="description" --research
+task-master expand --id=<id> --research --force
+```
 
-```json
-{
-  "mcpServers": {
-    "task-master-ai": {
-      "command": "npx",
-      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
-      "env": {
-        "ANTHROPIC_API_KEY": "your_key_here",
-        "PERPLEXITY_API_KEY": "your_key_here",
-        "OPENAI_API_KEY": "OPENAI_API_KEY_HERE",
-        "GOOGLE_API_KEY": "GOOGLE_API_KEY_HERE",
-        "XAI_API_KEY": "XAI_API_KEY_HERE",
-        "OPENROUTER_API_KEY": "OPENROUTER_API_KEY_HERE",
-        "MISTRAL_API_KEY": "MISTRAL_API_KEY_HERE",
-        "AZURE_OPENAI_API_KEY": "AZURE_OPENAI_API_KEY_HERE",
-        "OLLAMA_API_KEY": "OLLAMA_API_KEY_HERE"
-      }
+## Development Commands
+
+### Code Quality and Testing
+```bash
+# Lint and format code (primary tool)
+ruff check --fix .
+ruff format .
+
+# Type checking
+mypy src/
+
+# Run tests
+pytest
+
+# Memory profiling (for performance optimization)
+python -m memory_profiler src/main.py
+```
+
+### Running the Game
+```bash
+# Run main game
+python src/main.py
+
+# With memory profiling
+python -m memory_profiler src/main.py
+```
+
+## Project Architecture
+
+### ECS (Entity-Component-System) Architecture
+The game follows an ECS architecture pattern:
+
+- **Entities**: Game objects (Player, Enemy, Item, etc.)
+- **Components**: Data containers (Position, Health, Velocity, etc.)
+- **Systems**: Logic processors (Movement, Collision, Rendering, etc.)
+
+### Project Structure
+```
+src/
+├── core/           # ECS framework foundation
+│   ├── entity.py
+│   ├── component.py
+│   ├── system.py
+│   ├── entity_manager.py
+│   ├── component_registry.py
+│   └── system_orchestrator.py
+├── systems/        # Game systems
+├── components/     # Game components
+├── entities/       # Game entities
+└── utils/         # Utility functions
+
+tests/             # Test files
+docs/              # Documentation
+```
+
+### Game Concept
+"방과 후 생존" (After School Survivors) - A 10-minute hyper-casual roguelike game where players survive waves of teachers using automatic movement and combat.
+
+### Current Architecture
+- **Single file implementation**: All game logic currently in `src/main.py`
+- **Pygame-based**: Uses pygame for rendering, input, and game loop
+- **Simple player system**: Mouse-following movement with auto-rotation
+- **Target performance**: 40+ FPS for smooth gameplay
+
+### Performance Targets
+- Maintain 40+ FPS during gameplay
+- Handle large numbers of entities efficiently
+- Memory-conscious entity lifecycle management
+
+## Code Conventions
+
+### Core Principles
+1. **Type Safety**: All functions require type hints using Python 3.13+ native syntax
+2. **Performance-First Enums**: Use IntEnum with multi-layer patterns (value for computation, display_name for UI)
+3. **ECS Architecture**: Separate components from systems, prefer pure functions
+4. **Korean Language Support**: Test methods and game content in Korean
+
+### Modern Python Type Hints (Required)
+
+**✅ Use Native Collections (Python 3.9+)**
+```python
+def process_entities(entities: list[Entity]) -> dict[str, int]:
+    return {}
+
+def handle_input(value: int | float | None) -> str:  # Python 3.10+ union syntax
+    return ""
+```
+
+**✅ Complete Function Typing (Mandatory)**
+```python
+def calculate_damage_with_synergy(
+    base_damage: int,
+    synergy_multiplier: float, 
+    target_defense: int
+) -> int:
+    return int(base_damage * synergy_multiplier - target_defense)
+```
+
+### Multi-Layer Enum Performance Pattern
+
+**MUST use IntEnum for all predefined game values with these suffixes:**
+- `*_type`: `weapon_type: WeaponType`, `projectile_type: ProjectileType`
+- `*_status`: `player_status: PlayerStatus`, `game_status: GameStatus`
+- `*_state`: `entity_state: EntityState`, `game_state: GameState`  
+- `*_mode`: `difficulty_mode: DifficultyMode`, `render_mode: RenderMode`
+
+**Three-Layer Implementation Pattern:**
+```python
+from enum import IntEnum
+
+class WeaponType(IntEnum):
+    SOCCER_BALL = 0
+    BASKETBALL = 1  
+    BASEBALL_BAT = 2
+    
+    @property
+    def display_name(self) -> str:
+        return self._display_names[self]
+    
+    @property
+    def damage_multiplier(self) -> float:
+        return self._damage_multipliers[self.value]  # Performance lookup
+    
+    _display_names = {
+        SOCCER_BALL: "축구공",
+        BASKETBALL: "농구공", 
+        BASEBALL_BAT: "야구 배트"
     }
-  }
-}
+    
+    _damage_multipliers = [1.2, 1.0, 1.5]  # Index-based fast lookup
 ```
 
-### Essential MCP Tools
+**Usage by Context:**
+```python
+# ✅ Business Logic - Use Enum directly
+@dataclass
+class WeaponComponent:
+    weapon_type: WeaponType
+    damage: int
 
-```javascript
-help; // = shows available taskmaster commands
-// Project setup
-initialize_project; // = task-master init
-parse_prd; // = task-master parse-prd
+# ✅ Performance Critical - Use .value for computations
+def calculate_damage(weapon: WeaponComponent, base_damage: int) -> int:
+    multiplier = weapon.weapon_type._damage_multipliers[weapon.weapon_type.value]
+    return int(base_damage * multiplier)
 
-// Daily workflow
-get_tasks; // = task-master list
-next_task; // = task-master next
-get_task; // = task-master show <id>
-set_task_status; // = task-master set-status
-
-// Task management
-add_task; // = task-master add-task
-expand_task; // = task-master expand
-update_task; // = task-master update-task
-update_subtask; // = task-master update-subtask
-update; // = task-master update
-
-// Analysis
-analyze_project_complexity; // = task-master analyze-complexity
-complexity_report; // = task-master complexity-report
+# ✅ UI/Display - Use .display_name  
+def render_weapon_ui(weapon: WeaponComponent) -> str:
+    return f"무기: {weapon.weapon_type.display_name}"
 ```
 
-## Claude Code Workflow Integration
+### Game-Specific Enums (Required)
 
-### Standard Development Workflow
+```python
+class PlayerStatus(IntEnum):
+    ALIVE = 0
+    INVULNERABLE = 1
+    DEAD = 2
+    
+    @property
+    def display_name(self) -> str:
+        return ["생존", "무적", "사망"][self.value]
 
-#### 1. Project Initialization
+class GameState(IntEnum):
+    MENU = 0
+    PLAYING = 1
+    PAUSED = 2
+    GAME_OVER = 3
+    BOSS_FIGHT = 4
 
-```bash
-# Initialize Task Master
-task-master init
+class ItemType(IntEnum):
+    SOCCER_SHOES = 0  # 축구화
+    BASKETBALL_SHOES = 1  # 농구화  
+    RED_GINSENG = 2  # 홍삼
+    MILK = 3  # 우유
+```
+### ECS Architecture Implementation
 
-# Create or obtain PRD, then parse it
-task-master parse-prd .taskmaster/docs/prd.txt
+**Interface Definition with ABC:**
+```python
+from abc import ABC, abstractmethod
 
-# Analyze complexity and expand tasks
-task-master analyze-complexity --research
-task-master expand --all --research
+class ISystem(ABC):
+    @abstractmethod
+    def update(self, entities: list[Entity], delta_time: float) -> None: pass
+    
+    @abstractmethod
+    def initialize(self) -> None: pass
 ```
 
-If tasks already exist, another PRD can be parsed (with new information only!) using parse-prd with --append flag. This will add the generated tasks to the existing list of tasks..
+**Component Structure (Required dataclass + Enum pattern):**
+```python
+@dataclass
+class HealthComponent:
+    current: int
+    maximum: int
+    status: PlayerStatus  # Enum for type safety
+    regeneration_rate: float
 
-#### 2. Daily Development Loop
-
-```bash
-# Start each session
-task-master next                           # Find next available task
-task-master show <id>                     # Review task details
-
-# During implementation, check in code context into the tasks and subtasks
-task-master update-subtask --id=<id> --prompt="implementation notes..."
-
-# Complete tasks
-task-master set-status --id=<id> --status=done
+@dataclass
+class WeaponComponent:
+    weapon_type: WeaponType  # Multi-layer Enum
+    damage: int
+    attack_speed: float
+    synergy_items: list[ItemType] = field(default_factory=list)
 ```
 
-#### 3. Multi-Claude Workflows
+### Performance Optimization Rules
 
-For complex projects, use multiple Claude Code sessions:
-
-```bash
-# Terminal 1: Main implementation
-cd project && claude
-
-# Terminal 2: Testing and validation
-cd project-test-worktree && claude
-
-# Terminal 3: Documentation updates
-cd project-docs-worktree && claude
+**✅ Pure Functions for Game Calculations:**
+```python
+def calculate_movement_delta(
+    current_pos: tuple[float, float],
+    velocity: tuple[float, float],
+    delta_time: float
+) -> tuple[float, float]:
+    return (
+        current_pos[0] + velocity[0] * delta_time,
+        current_pos[1] + velocity[1] * delta_time
+    )
 ```
 
-### Custom Slash Commands
-
-Create `.claude/commands/taskmaster-next.md`:
-
-```markdown
-Find the next available Task Master task and show its details.
-
-Steps:
-
-1. Run `task-master next` to get the next task
-2. If a task is available, run `task-master show <id>` for full details
-3. Provide a summary of what needs to be implemented
-4. Suggest the first implementation step
+**✅ Use enum.value for Performance-Critical Game Loops:**
+```python
+def apply_boss_debuff(
+    player_speed: float,
+    debuff_types: list[DebuffType]
+) -> float:
+    multiplier = 1.0
+    for debuff in debuff_types:
+        if debuff.value == DebuffType.SLOW.value:  # Fast int comparison
+            multiplier *= 0.5
+    return player_speed * multiplier
 ```
 
-Create `.claude/commands/taskmaster-complete.md`:
+### Naming Conventions
 
-```markdown
-Complete a Task Master task: $ARGUMENTS
+- **Classes**: `PascalCase` (PlayerMovementSystem, HealthComponent, ICollisionDetector)
+- **Functions/Variables**: `snake_case` (calculate_damage_with_synergy, max_health)
+- **Constants**: `UPPER_SNAKE_CASE` (MAX_ENEMIES_COUNT, DEFAULT_PLAYER_SPEED)
+- **Component Suffix**: Always end with "Component" (HealthComponent, WeaponComponent)
 
-Steps:
+### Code Quality Requirements
 
-1. Review the current task with `task-master show $ARGUMENTS`
-2. Verify all implementation is complete
-3. Run any tests related to this task
-4. Mark as complete: `task-master set-status --id=$ARGUMENTS --status=done`
-5. Show the next available task with `task-master next`
+**Before committing, verify:**
+- [ ] All functions have complete type hints using Python 3.13+ syntax
+- [ ] Game values use appropriate IntEnum types (*_type, *_status, *_state, *_mode)
+- [ ] Performance-critical code uses enum.value for integer comparisons
+- [ ] UI code uses enum.display_name for Korean text display
+- [ ] Components use @dataclass with type hints
+- [ ] Pure functions separate from state mutation
+- [ ] AI 주석 시스템 적절히 적용 (AI-NOTE, AI-DEV)
+- [ ] `ruff check .` and `ruff format .` pass without errors
+
+### AI 주석 시스템
+
+#### # AI-NOTE : 비즈니스 로직 & 요구사항
+
+**사용 시점**: 비즈니스 로직, 사용자 요구사항, 도메인 규칙 반영 시
+
+**작성 형식**:
+```python
+# AI-NOTE : [변경일자] 비즈니스 로직 설명
+# - 이유: 왜 이렇게 구현했는지
+# - 요구사항: 어떤 요구사항을 반영했는지
+# - 히스토리: 이전 버전과의 차이점
 ```
 
-## Tool Allowlist Recommendations
-
-Add to `.claude/settings.json`:
-
-```json
-{
-  "allowedTools": [
-    "Edit",
-    "Bash(task-master *)",
-    "Bash(git commit:*)",
-    "Bash(git add:*)",
-    "Bash(npm run *)",
-    "mcp__task_master_ai__*"
-  ]
-}
+**예시**:
+```python
+# AI-NOTE : 2025-01-10 무기별 데미지 배율 시스템 도입
+# - 이유: 게임 밸런스 조정을 위한 요구사항 반영
+# - 요구사항: 축구공(1.2배), 농구공(1.0배), 야구방망이(1.5배)
+# - 히스토리: 기존 고정 데미지에서 무기별 차별화로 변경
+def calculate_damage(self, base_damage: int, weapon_type: WeaponType) -> int:
+    multiplier = weapon_type.damage_multiplier
+    return int(base_damage * multiplier)
 ```
 
-## Configuration & Setup
-
-### API Keys Required
-
-At least **one** of these API keys must be configured:
-
-- `ANTHROPIC_API_KEY` (Claude models) - **Recommended**
-- `PERPLEXITY_API_KEY` (Research features) - **Highly recommended**
-- `OPENAI_API_KEY` (GPT models)
-- `GOOGLE_API_KEY` (Gemini models)
-- `MISTRAL_API_KEY` (Mistral models)
-- `OPENROUTER_API_KEY` (Multiple models)
-- `XAI_API_KEY` (Grok models)
-
-An API key is required for any provider used across any of the 3 roles defined in the `models` command.
-
-### Model Configuration
-
-```bash
-# Interactive setup (recommended)
-task-master models --setup
-
-# Set specific models
-task-master models --set-main claude-3-5-sonnet-20241022
-task-master models --set-research perplexity-llama-3.1-sonar-large-128k-online
-task-master models --set-fallback gpt-4o-mini
+**히스토리 관리**:
+```python
+# AI-NOTE : [변경 히스토리]
+# - 2025-01-15: 보스전 시 데미지 20% 감소 적용 (난이도 조정 요구사항)
+# - 2025-01-10: 무기별 데미지 배율 시스템 도입 (밸런스 요구사항)
+# - 2025-01-05: 기본 데미지 계산 로직 구현 (초기 요구사항)
 ```
 
-## Task Structure & IDs
+#### # AI-DEV : 개발 기술적 사항
 
-### Task ID Format
+**사용 시점**: 기술적 해결책, 성능 최적화, 버그 수정, 개발 환경 이슈
 
-- Main tasks: `1`, `2`, `3`, etc.
-- Subtasks: `1.1`, `1.2`, `2.1`, etc.
-- Sub-subtasks: `1.1.1`, `1.1.2`, etc.
-
-### Task Status Values
-
-- `pending` - Ready to work on
-- `in-progress` - Currently being worked on
-- `done` - Completed and verified
-- `deferred` - Postponed
-- `cancelled` - No longer needed
-- `blocked` - Waiting on external factors
-
-### Task Fields
-
-```json
-{
-  "id": "1.2",
-  "title": "Implement user authentication",
-  "description": "Set up JWT-based auth system",
-  "status": "pending",
-  "priority": "high",
-  "dependencies": ["1.1"],
-  "details": "Use bcrypt for hashing, JWT for tokens...",
-  "testStrategy": "Unit tests for auth functions, integration tests for login flow",
-  "subtasks": []
-}
+**작성 형식**:
+```python
+# AI-DEV : [기술적 이유] 구현 설명
+# - 문제: 어떤 기술적 문제가 있었는지
+# - 해결책: 어떻게 해결했는지
+# - 주의사항: 유지보수 시 주의할 점
 ```
 
-## Claude Code Best Practices with Task Master
-
-### Context Management
-
-- Use `/clear` between different tasks to maintain focus
-- This CLAUDE.md file is automatically loaded for context
-- Use `task-master show <id>` to pull specific task context when needed
-
-### Iterative Implementation
-
-1. `task-master show <subtask-id>` - Understand requirements
-2. Explore codebase and plan implementation
-3. `task-master update-subtask --id=<id> --prompt="detailed plan"` - Log plan
-4. `task-master set-status --id=<id> --status=in-progress` - Start work
-5. Implement code following logged plan
-6. `task-master update-subtask --id=<id> --prompt="what worked/didn't work"` - Log progress
-7. `task-master set-status --id=<id> --status=done` - Complete task
-
-### Complex Workflows with Checklists
-
-For large migrations or multi-step processes:
-
-1. Create a markdown PRD file describing the new changes: `touch task-migration-checklist.md` (prds can be .txt or .md)
-2. Use Taskmaster to parse the new prd with `task-master parse-prd --append` (also available in MCP)
-3. Use Taskmaster to expand the newly generated tasks into subtasks. Consdier using `analyze-complexity` with the correct --to and --from IDs (the new ids) to identify the ideal subtask amounts for each task. Then expand them.
-4. Work through items systematically, checking them off as completed
-5. Use `task-master update-subtask` to log progress on each task/subtask and/or updating/researching them before/during implementation if getting stuck
-
-### Git Integration
-
-Task Master works well with `gh` CLI:
-
-```bash
-# Create PR for completed task
-gh pr create --title "Complete task 1.2: User authentication" --body "Implements JWT auth system as specified in task 1.2"
-
-# Reference task in commits
-git commit -m "feat: implement JWT auth (task 1.2)"
+**예시**:
+```python
+# AI-DEV : 레이스 컨디션 방지를 위한 비동기 저장 완료 대기
+# - 문제: async 저장과 sync 저장이 동시 실행되어 파일 충돌 발생
+# - 해결책: threading.Event로 비동기 작업 완료 신호 대기
+# - 주의사항: timeout 설정으로 무한 대기 방지 (100ms)
+def save_config(self) -> bool:
+    if not self._async_save_event.is_set():
+        self._async_save_event.wait(timeout=0.1)
 ```
 
-### Parallel Development with Git Worktrees
+#### 주석 활용 가이드라인
 
-```bash
-# Create worktrees for parallel task development
-git worktree add ../project-auth feature/auth-system
-git worktree add ../project-api feature/api-refactor
-
-# Run Claude Code in each worktree
-cd ../project-auth && claude    # Terminal 1: Auth work
-cd ../project-api && claude     # Terminal 2: API work
+**1. 주석 위치**: 관련 코드 바로 위에 작성
+**2. 중첩 사용 가능**:
+```python
+# AI-NOTE : 사용자 요구사항 - 아이템 시너지 시스템
+class ItemSynergy:
+    def calculate_bonus(self, items: list[ItemType]) -> float:
+        # AI-DEV : 성능을 위한 사전 계산된 시너지 테이블 사용
+        # - 이유: 실시간 계산 시 프레임 드롭 발생
+        return self._synergy_table.get(tuple(sorted(items)), 1.0)
 ```
 
-## Troubleshooting
+**3. 업데이트 규칙**:
+- 코드 변경 시 관련 AI-NOTE/AI-DEV 주석도 함께 업데이트
+- 이전 버전 정보는 히스토리로 보존
+- 불필요해진 주석은 삭제하되 중요한 결정은 히스토리로 남김
 
-### AI Commands Failing
+### Testing Pattern
 
-```bash
-# Check API keys are configured
-cat .env                           # For CLI usage
+**MANDATORY: Follow Korean testing conventions when using /write-unit-test command**
 
-# Verify model configuration
-task-master models
+#### 🚨 pytest 경고 방지 규칙 (Critical)
 
-# Test with different model
-task-master models --set-fallback gpt-4o-mini
+**❌ 금지사항**: Helper/Mock 클래스에 `Test` 접두사 사용 금지
+```python
+# 잘못된 예 - pytest가 테스트 클래스로 오인
+class TestPositionComponent(Component):  # ❌
+class TestMovementSystem(System):        # ❌
 ```
 
-### MCP Connection Issues
-
-- Check `.mcp.json` configuration
-- Verify Node.js installation
-- Use `--mcp-debug` flag when starting Claude Code
-- Use CLI as fallback if MCP unavailable
-
-### Task File Sync Issues
-
-```bash
-# Regenerate task files from tasks.json
-task-master generate
-
-# Fix dependency issues
-task-master fix-dependencies
+**✅ 권장사항**: Helper/Mock 클래스는 명확한 접두사 사용
+```python
+# 올바른 예 - Helper/Mock 클래스임을 명확히 표시
+class MockPositionComponent(Component):  # ✅
+class FakeMovementSystem(System):        # ✅ 
+class DummyHealthComponent(Component):   # ✅
+class StubRenderSystem(System):          # ✅
 ```
 
-DO NOT RE-INITIALIZE. That will not do anything beyond re-adding the same Taskmaster core files.
+**pytest 컬렉션 패턴 이해**:
+- pytest가 테스트로 인식: 클래스명 `Test*`, 함수명 `test_*`, 파일명 `test_*.py`
+- Helper 클래스가 피해야 할 패턴: `Test`로 시작하는 클래스명 + `__init__` 메서드
 
-## Important Notes
+```python
+import pytest
 
-### AI-Powered Operations
+class TestWeaponComponent:
+    def test_무기_시너지_데미지_계산_정확성_성공_시나리오(self) -> None:
+        """1. 무기 시너지 적용 시 데미지 계산 정확성 검증 (성공 시나리오)
+        
+        목적: 시너지 아이템 조합 시 데미지 배율 계산 검증
+        테스트할 범위: WeaponComponent의 damage_multiplier 연동
+        커버하는 함수 및 데이터: weapon_type 속성들
+        기대되는 안정성: 일관된 데미지 배율 계산 보장
+        """
+        # Given - 축구공과 축구화 조합 설정
+        weapon = WeaponComponent(
+            weapon_type=WeaponType.SOCCER_BALL,
+            damage=10,
+            synergy_items=[ItemType.SOCCER_SHOES]
+        )
+        
+        # When - 각 레이어 데이터 조회
+        performance_value = weapon.weapon_type.value
+        display_name = weapon.weapon_type.display_name  
+        damage_multiplier = weapon.weapon_type.damage_multiplier
+        
+        # Then - 정확한 값 반환 확인
+        assert performance_value == 0, "축구공의 성능 인덱스는 0이어야 함"
+        assert display_name == "축구공", "축구공의 표시명이 정확해야 함" 
+        assert damage_multiplier == 1.2, "축구공의 데미지 배율이 1.2여야 함"
+```
 
-These commands make AI calls and may take up to a minute:
 
-- `parse_prd` / `task-master parse-prd`
-- `analyze_project_complexity` / `task-master analyze-complexity`
-- `expand_task` / `task-master expand`
-- `expand_all` / `task-master expand --all`
-- `add_task` / `task-master add-task`
-- `update` / `task-master update`
-- `update_task` / `task-master update-task`
-- `update_subtask` / `task-master update-subtask`
+### Performance Requirements
+- Target 60 FPS with 50+ entities
+- Memory leak prevention for entity creation/destruction
+- Optimized collision detection for game objects
 
-### File Management
+## AI Development Rules
 
-- Never manually edit `tasks.json` - use commands instead
-- Never manually edit `.taskmaster/config.json` - use `task-master models`
-- Task markdown files in `tasks/` are auto-generated
-- Run `task-master generate` after manual changes to tasks.json
+### Code Writing
+- Follow `ai/rules/code-convention-rule.md` for Python conventions
+- Implement ECS patterns for game architecture
+- Use performance-optimized enums for game state management
 
-### Claude Code Session Management
+### Testing
+- Follow @ai/rules/unit-test-rule.md for pytest conventions
+- Write Korean test names with scenario suffixes
+- Include memory and performance tests for game systems
 
-- Use `/clear` frequently to maintain focused context
-- Create custom slash commands for repeated Task Master workflows
-- Configure tool allowlist to streamline permissions
-- Use headless mode for automation: `claude -p "task-master next"`
+### Comments and Documentation
+- Follow @ai/rules/AI_COMMENT_GUIDELINES.md
+- Use AI-DEV comments for technical decision documentation
+- Korean language support for game content and UI
 
-### Multi-Task Updates
-
-- Use `update --from=<id>` to update multiple future tasks
-- Use `update-task --id=<id>` for single task updates
-- Use `update-subtask --id=<id>` for implementation logging
-
-### Research Mode
-
-- Add `--research` flag for research-based AI enhancement
-- Requires a research model API key like Perplexity (`PERPLEXITY_API_KEY`) in environment
-- Provides more informed task creation and updates
-- Recommended for complex technical tasks
-
----
-
-_This guide ensures Claude Code has immediate access to Task Master's essential functionality for agentic development workflows._
+**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
+@./.taskmaster/CLAUDE.md
