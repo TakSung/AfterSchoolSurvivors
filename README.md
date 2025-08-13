@@ -18,5 +18,5 @@ conda create -y -n as-game python=3.13
 
 ```bash
 conda activate as-game
-conda install conda-forge::pygame
+uv pip install -r requirements.txt
 ```
