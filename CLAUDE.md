@@ -57,26 +57,26 @@ task-master expand --id=<id> --research --force
 ### Code Quality and Testing
 ```bash
 # Lint and format code (primary tool)
-ruff check --fix .
-ruff format .
+/opt/homebrew/anaconda3/envs/as-game/bin/python ruff check --fix .
+/opt/homebrew/anaconda3/envs/as-game/bin/python ruff format .
 
 # Type checking
-mypy src/
+/opt/homebrew/anaconda3/envs/as-game/bin/python mypy src/
 
 # Run tests
-pytest
+/opt/homebrew/anaconda3/envs/as-game/bin/python pytest
 
 # Memory profiling (for performance optimization)
-python -m memory_profiler src/main.py
+/opt/homebrew/anaconda3/envs/as-game/bin/python  -m memory_profiler src/main.py
 ```
 
 ### Running the Game
 ```bash
 # Run main game
-python src/main.py
+/opt/homebrew/anaconda3/envs/as-game/bin/python  src/main.py
 
 # With memory profiling
-python -m memory_profiler src/main.py
+/opt/homebrew/anaconda3/envs/as-game/bin/python  -m memory_profiler src/main.py
 ```
 
 ## Project Architecture
