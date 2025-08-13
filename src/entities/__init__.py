@@ -6,5 +6,8 @@ ECS 아키텍처를 기반으로 한 적 캐릭터 시스템을 제공합니다.
 """
 
 from .enemy import Enemy
+from .korean_teacher import KoreanTeacher
+from .math_teacher import MathTeacher
+from .principal_boss import PrincipalBoss
 
-__all__ = ["Enemy"]
+__all__ = ["Enemy", "KoreanTeacher", "MathTeacher", "PrincipalBoss"]
