@@ -259,7 +259,7 @@
               "3.6"
             ],
             "details": "CollisionManager 클래스 구현. 적-플레이어, 적-무기 간 충돌 감지와 피해 계산, 체력 감소, 무적 시간 처리 등을 담당합니다. 효율적인 충돌 감지를 위한 공간 분할 기법도 적용합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -831,7 +831,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-08-27T11:58:48.378Z",
+      "updated": "2025-08-27T12:04:51.614Z",
       "description": "Tasks for master context"
     }
   }

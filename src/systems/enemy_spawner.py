@@ -7,7 +7,7 @@ from ..components.enums import EnemyType
 from ..entities.enemy import Enemy
 
 if TYPE_CHECKING:
-    from ..core.entity_manager import EntityManager
+    from core.entity_manager import EntityManager
 
 # AI-NOTE : 2025-01-13 적 스포너 및 생성 시스템 구현
 # - 이유: 적 캐릭터들을 화면 밖에서 지속적으로 생성하고 관리하는 게임플레이 요구사항

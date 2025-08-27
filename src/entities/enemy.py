@@ -3,7 +3,7 @@ import random
 import math
 from typing import TYPE_CHECKING, Union, Optional
 
-from ..core.entity import Entity
+from core.entity import Entity
 from ..components.enemy_component import EnemyComponent
 from ..components.health_component import HealthComponent
 from ..components.position_component import PositionComponent
@@ -11,7 +11,7 @@ from ..components.velocity_component import VelocityComponent
 from ..components.enums import EnemyType, EnemyState, EntityStatus
 
 if TYPE_CHECKING:
-    from ..core.entity_manager import EntityManager
+    from core.entity_manager import EntityManager
 
 # AI-NOTE : 2025-01-13 Enemy 베이스 클래스 ECS 아키텍처 구현
 # - 이유: 모든 적 캐릭터의 공통 기능 및 팩토리 패턴 제공 요구사항

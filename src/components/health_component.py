@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from .enums import EntityStatus
-from ..core.component import Component
+from core.component import Component
 
 @dataclass
 class HealthComponent(Component):
