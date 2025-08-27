@@ -10,6 +10,7 @@ from ..core.component import Component
 @dataclass
 class EnemyComponent(Component):
     enemy_type: EnemyType
+    speed: float = 2.0
     current_state: EnemyState = EnemyState.SPAWNING
     target_entity_id: int | None = None  # 추적할 타겟 엔티티 ID (보통 플레이어)
     attack_cooldown: float = 0.0  # 공격 쿨다운 남은 시간 (초)

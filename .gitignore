@@ -234,3 +234,6 @@ node_modules/
 
 .mcp.json
 .taskmaster/config.json
+
+
+temp*
