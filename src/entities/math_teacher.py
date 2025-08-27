@@ -1,6 +1,6 @@
 import math as math_module
-from ..components.enums import EnemyType, EnemyState
-from ..components.enemy_component import EnemyComponent
+from components.enums import EnemyType, EnemyState
+from components.enemy_component import EnemyComponent
 from .enemy import Enemy
 
 # AI-NOTE : 2025-01-13 수학선생님 캐릭터 구현
@@ -95,7 +95,7 @@ class MathTeacher(Enemy):
         if not self._entity_manager or not self._entity:
             return (player_x, player_y)
         
-        from ..components.position_component import PositionComponent
+        from components.position_component import PositionComponent
         pos_comp = self._entity_manager.get_component(self._entity.id, PositionComponent)
         if not pos_comp:
             return (player_x, player_y)
@@ -181,7 +181,7 @@ class MathTeacher(Enemy):
         if not self._entity_manager or not self._entity:
             return (0.0, 0.0)
         
-        from ..components.position_component import PositionComponent
+        from components.position_component import PositionComponent
         pos_comp = self._entity_manager.get_component(self._entity.id, PositionComponent)
         if not pos_comp:
             return (0.0, 0.0)

@@ -6,11 +6,11 @@ import math
 
 from core.system import ISystem
 from core.entity_manager import EntityManager
-from ..components.player_component import PlayerComponent
-from ..components.position_component import PositionComponent
-from ..components.attack_component import AttackComponent
-from ..components.velocity_component import VelocityComponent
-from ..components.sprite_component import SpriteComponent
+from components.player_component import PlayerComponent
+from components.position_component import PositionComponent
+from components.attack_component import AttackComponent
+from components.velocity_component import VelocityComponent
+from components.sprite_component import SpriteComponent
 
 if TYPE_CHECKING:
     from core.entity_manager import EntityManager

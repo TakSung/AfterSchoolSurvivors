@@ -1,8 +1,8 @@
 import math as math_module
 import random
 from enum import IntEnum
-from ..components.enums import EnemyType, EnemyState
-from ..components.enemy_component import EnemyComponent
+from components.enums import EnemyType, EnemyState
+from components.enemy_component import EnemyComponent
 from .enemy import Enemy
 
 # AI-NOTE : 2025-01-13 교장선생님 보스 캐릭터 구현
@@ -139,7 +139,7 @@ class PrincipalBoss(Enemy):
         if not self._entity_manager or not self._entity:
             return BossPhase.PHASE_1
         
-        from ..components.health_component import HealthComponent
+        from components.health_component import HealthComponent
         health_comp = self._entity_manager.get_component(self._entity.id, HealthComponent)
         if not health_comp:
             return BossPhase.PHASE_1
@@ -318,7 +318,7 @@ class PrincipalBoss(Enemy):
         if not self._entity_manager or not self._entity:
             return
         
-        from ..components.health_component import HealthComponent
+        from components.health_component import HealthComponent
         health_comp = self._entity_manager.get_component(self._entity.id, HealthComponent)
         enemy_comp = self._entity_manager.get_component(self._entity.id, EnemyComponent)
         

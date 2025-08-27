@@ -3,7 +3,7 @@ import random
 from typing import TYPE_CHECKING, Optional, List
 from enum import IntEnum
 
-from ..components.enums import EnemyType
+from components.enums import EnemyType
 from ..entities.enemy import Enemy
 
 if TYPE_CHECKING:

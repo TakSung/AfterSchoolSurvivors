@@ -1,5 +1,5 @@
-from ..components.enums import EnemyType
-from ..components.enemy_component import EnemyComponent
+from components.enums import EnemyType
+from components.enemy_component import EnemyComponent
 from .enemy import Enemy
 
 # AI-NOTE : 2025-01-13 국어선생님 캐릭터 구현 
@@ -88,7 +88,7 @@ class KoreanTeacher(Enemy):
             return (0.0, 0.0)
         
         # 현재 위치 가져오기
-        from ..components.position_component import PositionComponent
+        from components.position_component import PositionComponent
         pos_comp = self._entity_manager.get_component(self._entity.id, PositionComponent)
         if not pos_comp:
             return (0.0, 0.0)
@@ -118,7 +118,7 @@ class KoreanTeacher(Enemy):
         if not self._entity_manager or not self._entity:
             return False
         
-        from ..components.enemy_component import EnemyComponent
+        from components.enemy_component import EnemyComponent
         enemy_comp = self._entity_manager.get_component(self._entity.id, EnemyComponent)
         if not enemy_comp:
             return False

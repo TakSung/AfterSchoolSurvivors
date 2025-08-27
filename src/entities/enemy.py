@@ -4,11 +4,11 @@ import math
 from typing import TYPE_CHECKING, Union, Optional
 
 from core.entity import Entity
-from ..components.enemy_component import EnemyComponent
-from ..components.health_component import HealthComponent
-from ..components.position_component import PositionComponent
-from ..components.velocity_component import VelocityComponent
-from ..components.enums import EnemyType, EnemyState, EntityStatus
+from components.enemy_component import EnemyComponent
+from components.health_component import HealthComponent
+from components.position_component import PositionComponent
+from components.velocity_component import VelocityComponent
+from components.enums import EnemyType, EnemyState, EntityStatus
 
 if TYPE_CHECKING:
     from core.entity_manager import EntityManager

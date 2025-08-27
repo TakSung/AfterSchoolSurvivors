@@ -4,12 +4,12 @@ import math
 from typing import TYPE_CHECKING
 
 from core.system import ISystem
-from ..components.position_component import PositionComponent
-from ..components.health_component import HealthComponent
-from ..components.player_component import PlayerComponent
-from ..components.enemy_component import EnemyComponent
-from ..components.attack_component import AttackComponent
-from ..components.enums import EntityStatus
+from components.position_component import PositionComponent
+from components.health_component import HealthComponent
+from components.player_component import PlayerComponent
+from components.enemy_component import EnemyComponent
+from components.attack_component import AttackComponent
+from components.enums import EntityStatus
 
 if TYPE_CHECKING:
     from core.entity_manager import EntityManager
@@ -54,25 +54,46 @@ class CollisionSystem(ISystem):
 
 
         # 2. Weapon and Enemy collisions
+        enemies_to_destroy = set()
         for weapon_entity in weapon_entities:
             weapon_pos = entity_manager.get_component(weapon_entity.id, PositionComponent)
             weapon_attack = entity_manager.get_component(weapon_entity.id, AttackComponent)
+            
+            # Skip if weapon has no position or attack component
+            if not weapon_pos or not weapon_attack:
+                continue
+
             for enemy_entity in enemy_entities:
+                # Skip if enemy is already marked for destruction
+                if enemy_entity.id in enemies_to_destroy:
+                    continue
+
                 enemy_pos = entity_manager.get_component(enemy_entity.id, PositionComponent)
                 enemy_health = entity_manager.get_component(enemy_entity.id, HealthComponent)
 
-                if enemy_health.status == EntityStatus.DEAD:
+                # Skip if enemy has no position or health, or is already dead
+                if not enemy_pos or not enemy_health or enemy_health.status == EntityStatus.DEAD:
                     continue
 
                 if self._check_collision(weapon_pos, enemy_pos):
                     enemy_health.current -= weapon_attack.damage
+                    print(f"Enemy {enemy_entity.id} hit by weapon! Enemy health: {enemy_health.current}")
+                    
                     if enemy_health.current <= 0:
-                        enemy_health.status = EntityStatus.DEAD
+                        enemies_to_destroy.add(enemy_entity.id)
+                        print(f"Enemy {enemy_entity.id} marked for destruction.")
+
                     # Destroy weapon on hit
                     entity_manager.destroy_entity(weapon_entity.id)
-                    print(f"Enemy {enemy_entity.id} hit by weapon! Enemy health: {enemy_health.current}")
-                    # An enemy can only be hit by one weapon per frame.
+                    
+                    # An enemy can only be hit by one weapon per frame, so we break
+                    # after destroying the weapon.
                     break
+        
+        # Destroy all enemies marked for destruction
+        for enemy_id in enemies_to_destroy:
+            print(f"Destroying enemy {enemy_id}")
+            entity_manager.destroy_entity(enemy_id)
 
     def _check_collision(self, pos1: PositionComponent, pos2: PositionComponent) -> bool:
         """
