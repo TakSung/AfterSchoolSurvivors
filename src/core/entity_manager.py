@@ -27,3 +27,13 @@ class EntityManager:
     def destroy_entity(self, entity_id: int) -> None:
         if entity_id in self.entities:
             del self.entities[entity_id]
+
+    def get_entities_with_components(self, *component_types: Type[Component]) -> list[Entity]:
+        """Gets all entities that have all of the specified component types."""
+        entities = []
+        for entity_id, components in self.entities.items():
+            if all(ct in components for ct in component_types):
+                entity = Entity()
+                entity.id = entity_id
+                entities.append(entity)
+        return entities

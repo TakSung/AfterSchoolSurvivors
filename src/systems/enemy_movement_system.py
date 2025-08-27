@@ -2,14 +2,14 @@ from __future__ import annotations
 import math
 from typing import TYPE_CHECKING
 
-from ..core.system import ISystem
-from ..components.position_component import PositionComponent
-from ..components.velocity_component import VelocityComponent
-from ..components.enemy_component import EnemyComponent
-from ..components.player_component import PlayerComponent
+from core.system import ISystem
+from components.position_component import PositionComponent
+from components.velocity_component import VelocityComponent
+from components.enemy_component import EnemyComponent
+from components.player_component import PlayerComponent
 
 if TYPE_CHECKING:
-    from ..core.entity_manager import EntityManager
+    from core.entity_manager import EntityManager
 
 
 class EnemyMovementSystem(ISystem):

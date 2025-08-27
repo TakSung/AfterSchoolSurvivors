@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from .enums import EnemyType, EnemyState
-from ..core.component import Component
+from components.enums import EnemyType, EnemyState
+from core.component import Component
 
 # AI-NOTE : 2025-01-13 적 캐릭터 컴포넌트 시스템 구현
 # - 이유: ECS 아키텍처에 따른 적 캐릭터 데이터 분리 설계

@@ -247,7 +247,7 @@
               "3.4"
             ],
             "details": "플레이어 위치 추적, 경로 계산, 공격 범위 판단 등의 AI 로직을 구현합니다. 각 적 타입별로 다른 추적 방식과 공격 패턴을 적용하며, 장애물 회피 기능도 포함합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -831,7 +831,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-08-13T12:24:37.541Z",
+      "updated": "2025-08-27T11:58:48.378Z",
       "description": "Tasks for master context"
     }
   }
