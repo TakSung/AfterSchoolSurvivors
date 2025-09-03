@@ -14,6 +14,7 @@ from systems.collision_system import CollisionSystem
 from systems.enemy_movement_system import EnemyMovementSystem
 from systems.enemy_spawner_system import EnemySpawnerSystem
 from systems.player_attack_system import PlayerAttackSystem
+from systems.player_level_system import PlayerLevelSystem
 
 def main():
     pygame.init()
@@ -37,6 +38,7 @@ def main():
     enemy_movement_system = EnemyMovementSystem()
     enemy_spawner_system = EnemySpawnerSystem(SCREEN_WIDTH, SCREEN_HEIGHT)
     player_attack_system = PlayerAttackSystem()
+    player_level_system = PlayerLevelSystem()
 
     # Create player entity
     player_entity = entity_manager.create_entity()
@@ -73,6 +75,7 @@ def main():
         player_attack_system.update(entity_manager, delta_time)
         movement_system.update(entity_manager, delta_time)
         collision_system.update(entity_manager, delta_time)
+        player_level_system.update(entity_manager, delta_time)
 
         # Render
         render_system.update(entity_manager, delta_time)

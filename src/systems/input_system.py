@@ -13,13 +13,16 @@ if TYPE_CHECKING:
 
 class InputSystem(ISystem):
     """
-    Handles player input for movement.
+    Handles player input for movement and other actions.
     """
+    def __init__(self):
+        self.x_key_pressed = False
 
     def update(self, entity_manager: EntityManager, delta_time: float) -> None:
         """
-        Updates the player's velocity based on mouse position.
+        Updates the player's velocity based on mouse position and handles key presses.
         """
+        # Mouse-based movement
         player_entities = entity_manager.get_entities_with_components(PlayerComponent, PositionComponent, VelocityComponent)
 
         if not player_entities:
@@ -33,7 +36,6 @@ class InputSystem(ISystem):
         direction_x = mouse_pos[0] - player_pos.x
         direction_y = mouse_pos[1] - player_pos.y
 
-        # Normalize
         distance = (direction_x ** 2 + direction_y ** 2) ** 0.5
         if distance > 1:
             player_vel.dx = (direction_x / distance) * 5 # speed
@@ -41,3 +43,15 @@ class InputSystem(ISystem):
         else:
             player_vel.dx = 0
             player_vel.dy = 0
+
+        # Keyboard input for cheats
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_x]:
+            if not self.x_key_pressed:
+                self.x_key_pressed = True
+                player_comp = entity_manager.get_component(player_entity.id, PlayerComponent)
+                if player_comp:
+                    player_comp.experience += 20
+                    print(f"Added 20 XP. Total XP: {player_comp.experience}")
+        else:
+            self.x_key_pressed = False

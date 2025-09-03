@@ -6,6 +6,7 @@ import pygame
 from core.system import ISystem
 from components.position_component import PositionComponent
 from components.sprite_component import SpriteComponent
+from components.player_component import PlayerComponent
 
 if TYPE_CHECKING:
     from core.entity_manager import EntityManager
@@ -16,21 +17,47 @@ class RenderSystem(ISystem):
     """
     def __init__(self, screen: pygame.Surface):
         self.screen = screen
+        self.font = pygame.font.Font(None, 36)
 
     def update(self, entity_manager: EntityManager, delta_time: float) -> None:
         """
-        Renders all entities.
+        Renders all entities and the player's UI.
         """
-        # AI-DEV: This is a simple render system. For better performance,
-        # it could be optimized to only draw things that are on screen,
-        # and to draw in a specific order (e.g., background, then enemies, then player).
         self.screen.fill((0, 0, 0)) # Black background
 
+        # Draw all entities
         for entity in entity_manager.get_entities_with_components(PositionComponent, SpriteComponent):
             pos = entity_manager.get_component(entity.id, PositionComponent)
             sprite = entity_manager.get_component(entity.id, SpriteComponent)
 
             sprite.rect.center = (pos.x, pos.y)
             self.screen.blit(sprite.surface, sprite.rect)
+
+        # Draw Player UI (XP Bar and Level)
+        player_entities = entity_manager.get_entities_with_components(PlayerComponent)
+        if player_entities:
+            player_entity = player_entities[0]
+            player_comp = entity_manager.get_component(player_entity.id, PlayerComponent)
+
+            # XP Bar
+            xp_bar_width = self.screen.get_width() - 40
+            xp_bar_height = 20
+            xp_bar_x = 20
+            xp_bar_y = self.screen.get_height() - 30
+
+            fill_ratio = player_comp.experience / player_comp.experience_to_next_level
+            fill_width = xp_bar_width * fill_ratio
+
+            # Draw background
+            pygame.draw.rect(self.screen, (100, 100, 100), (xp_bar_x, xp_bar_y, xp_bar_width, xp_bar_height))
+            # Draw XP fill
+            pygame.draw.rect(self.screen, (150, 100, 255), (xp_bar_x, xp_bar_y, fill_width, xp_bar_height))
+            # Draw border
+            pygame.draw.rect(self.screen, (255, 255, 255), (xp_bar_x, xp_bar_y, xp_bar_width, xp_bar_height), 2)
+
+            # Level Text
+            level_text = self.font.render(f"Level: {player_comp.level}", True, (255, 255, 255))
+            self.screen.blit(level_text, (25, self.screen.get_height() - 60))
+
 
         pygame.display.flip()
