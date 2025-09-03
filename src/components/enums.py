@@ -44,11 +44,16 @@ def _get_base_attack_power(enemy_type: EnemyType) -> int:
     _base_attack_powers = [15, 10, 25]    # 국어선생님(중간), 수학선생님(낮음), 교장선생님(높음)
     return _base_attack_powers[enemy_type.value]
 
+def _get_base_experience_yield(enemy_type: EnemyType) -> int:
+    _base_experience_yields = [10, 5, 50] # 국어선생님(중간), 수학선생님(낮음), 교장선생님(높음)
+    return _base_experience_yields[enemy_type.value]
+
 # 동적으로 프로퍼티 추가
 EnemyType.display_name = property(lambda self: _get_display_name(self))
 EnemyType.base_speed = property(lambda self: _get_base_speed(self))  
 EnemyType.base_health = property(lambda self: _get_base_health(self))
 EnemyType.base_attack_power = property(lambda self: _get_base_attack_power(self))
+EnemyType.base_experience_yield = property(lambda self: _get_base_experience_yield(self))
 
 class EnemyState(IntEnum):
     SPAWNING = 0     # 생성 중
@@ -61,3 +66,10 @@ class EnemyState(IntEnum):
     @property
     def display_name(self) -> str:
         return ["생성중", "대기", "추적", "공격", "기절", "사망"][self.value]
+
+class ItemType(IntEnum):
+    EXPERIENCE_ORB = 0
+
+    @property
+    def display_name(self) -> str:
+        return ["경험치 구슬"][self.value]

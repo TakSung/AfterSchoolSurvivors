@@ -7,7 +7,6 @@ from components.velocity_component import VelocityComponent
 from components.health_component import HealthComponent
 from components.sprite_component import SpriteComponent
 from components.enums import EntityStatus
-
 from systems.input_system import InputSystem
 from systems.movement_system import MovementSystem
 from systems.render_system import RenderSystem
