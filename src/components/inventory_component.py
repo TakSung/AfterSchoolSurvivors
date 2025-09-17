@@ -3,6 +3,8 @@ from typing import Optional, TYPE_CHECKING
 from ..core.component import Component
 from ..entities.item import Item
 
+from ..core.exceptions import InventoryFullException
+
 if TYPE_CHECKING:
     from ..components.enums import ItemType
 
@@ -11,23 +13,23 @@ class InventoryComponent(Component):
     items: list[Optional[Item]] = field(default_factory=lambda: [None] * 6)
     max_slots: int = 6
 
-    def add_item(self, new_item: Item) -> bool:
+    def add_item(self, new_item: Item) -> None:
         # First, check if the same item exists to level it up
         for i, item in enumerate(self.items):
             if item and item.item_id == new_item.item_id:
                 if item.can_level_up():
                     item.level_up()
                     # TODO: Create level-up effect
-                    return True
+                    return
                 # If item is at max level, do nothing and proceed to find an empty slot.
 
         # If not found for leveling up, or if at max level, find an empty slot for the new item
         for i, item in enumerate(self.items):
             if item is None:
                 self.items[i] = new_item
-                return True
+                return
 
-        return False # Inventory is full
+        raise InventoryFullException("Inventory is full and no item could be leveled up.")
 
     def remove_item(self, slot_index: int) -> Optional[Item]:
         if 0 <= slot_index < self.max_slots:

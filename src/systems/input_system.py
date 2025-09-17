@@ -32,14 +32,16 @@ class InputSystem(ISystem):
         player_pos = entity_manager.get_component(player_entity.id, PositionComponent)
         player_vel = entity_manager.get_component(player_entity.id, VelocityComponent)
 
+        player_comp = entity_manager.get_component(player_entity.id, PlayerComponent)
+
         mouse_pos = pygame.mouse.get_pos()
         direction_x = mouse_pos[0] - player_pos.x
         direction_y = mouse_pos[1] - player_pos.y
 
         distance = (direction_x ** 2 + direction_y ** 2) ** 0.5
         if distance > 1:
-            player_vel.dx = (direction_x / distance) * 5 # speed
-            player_vel.dy = (direction_y / distance) * 5 # speed
+            player_vel.dx = (direction_x / distance) * player_comp.movement_speed
+            player_vel.dy = (direction_y / distance) * player_comp.movement_speed
         else:
             player_vel.dx = 0
             player_vel.dy = 0
@@ -49,7 +51,6 @@ class InputSystem(ISystem):
         if keys[pygame.K_x]:
             if not self.x_key_pressed:
                 self.x_key_pressed = True
-                player_comp = entity_manager.get_component(player_entity.id, PlayerComponent)
                 if player_comp:
                     player_comp.experience += 20
                     print(f"Added 20 XP. Total XP: {player_comp.experience}")
