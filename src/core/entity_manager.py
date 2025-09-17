@@ -24,6 +24,10 @@ class EntityManager:
         if entity_id in self.entities and component_type in self.entities[entity_id]:
             del self.entities[entity_id][component_type]
 
+    def has_component(self, entity_id: int, component_type: Type[Component]) -> bool:
+        """Checks whether the specified entity has a component of the given type."""
+        return component_type in self.entities.get(entity_id, {})
+
     def destroy_entity(self, entity_id: int) -> None:
         if entity_id in self.entities:
             del self.entities[entity_id]
