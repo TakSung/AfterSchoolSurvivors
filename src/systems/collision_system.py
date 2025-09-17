@@ -1,10 +1,8 @@
-
-from __future__ import annotations
-import math
-from typing import TYPE_CHECKING
 import pygame
+import math
 
 from core.system import ISystem
+from core.entity_manager import EntityManager
 from components.position_component import PositionComponent
 from components.health_component import HealthComponent
 from components.player_component import PlayerComponent
@@ -13,142 +11,160 @@ from components.attack_component import AttackComponent
 from components.item_component import ItemComponent
 from components.experience_component import ExperienceComponent
 from components.sprite_component import SpriteComponent
-from components.enums import EntityStatus, ItemType
-
-if TYPE_CHECKING:
-    from core.entity_manager import EntityManager
-
-# AI-DEV : For performance, this should be data-driven from components.
-# For now, we assume a fixed size for all entities.
-ENTITY_SIZE = 32
-EXP_ORB_SIZE = 10
+from components.projectile_component import ProjectileComponent
+from components.hitbox_component import HitboxComponent
+from components.velocity_component import VelocityComponent
+from components.enums import EntityStatus, ItemID
 
 class CollisionSystem(ISystem):
-    """
-    Handles collision detection and resolution between entities.
-    """
+    def __init__(self, screen_width: int, screen_height: int):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
 
     def update(self, entity_manager: EntityManager, delta_time: float) -> None:
-        """
-        Checks for and handles collisions between:
-        - Player and Enemies
-        - Player's weapons and Enemies
-        - Player and Items
-        """
-        player_entities = entity_manager.get_entities_with_components(PlayerComponent, PositionComponent, HealthComponent)
-        enemy_entities = entity_manager.get_entities_with_components(EnemyComponent, PositionComponent, HealthComponent)
-        weapon_entities = entity_manager.get_entities_with_components(AttackComponent, PositionComponent)
-        item_entities = entity_manager.get_entities_with_components(ItemComponent, PositionComponent, ExperienceComponent)
+        self.handle_player_enemy_collisions(entity_manager)
+        self.handle_weapon_enemy_collisions(entity_manager)
+        self.handle_player_item_collisions(entity_manager)
+        self.handle_hitbox_enemy_collisions(entity_manager)
+        self.update_hitboxes(entity_manager, delta_time)
+        self.handle_projectile_wall_collisions(entity_manager)
 
-        if not player_entities:
-            return
+    def handle_player_enemy_collisions(self, entity_manager: EntityManager):
+        player_entities = entity_manager.get_entities_with_components(PlayerComponent, SpriteComponent, HealthComponent)
+        enemy_entities = entity_manager.get_entities_with_components(EnemyComponent, SpriteComponent, HealthComponent)
 
+        if not player_entities: return
         player_entity = player_entities[0]
-        player_pos = entity_manager.get_component(player_entity.id, PositionComponent)
+        player_sprite = entity_manager.get_component(player_entity.id, SpriteComponent)
         player_health = entity_manager.get_component(player_entity.id, HealthComponent)
-        player_component = entity_manager.get_component(player_entity.id, PlayerComponent)
+        player_comp = entity_manager.get_component(player_entity.id, PlayerComponent)
 
-        # 1. Player and Enemy collisions
-        if player_health.status != EntityStatus.INVULNERABLE:
-            for enemy_entity in enemy_entities:
-                enemy_pos = entity_manager.get_component(enemy_entity.id, PositionComponent)
-                if self._check_collision(player_pos, enemy_pos, ENTITY_SIZE, ENTITY_SIZE):
-                    # For now, simple damage. In the future, this could be based on enemy stats.
-                    player_health.current -= 10
-                    if player_health.current <= 0:
-                        player_health.status = EntityStatus.DEAD
-                    # TODO: Add invulnerability timer
-                    print(f"Player collided with enemy {enemy_entity.id}! Player health: {player_health.current}")
+        if player_comp.is_invulnerable: return
 
+        for enemy_entity in enemy_entities:
+            enemy_sprite = entity_manager.get_component(enemy_entity.id, SpriteComponent)
+            if player_sprite.rect.colliderect(enemy_sprite.rect):
+                player_health.current -= 10 # Simple damage for now
+                if player_health.current <= 0:
+                    player_health.status = EntityStatus.DEAD
+                # TODO: Add invulnerability timer after hit
 
-        # 2. Weapon and Enemy collisions
+    def handle_weapon_enemy_collisions(self, entity_manager: EntityManager):
+        projectile_entities = entity_manager.get_entities_with_components(ProjectileComponent, SpriteComponent, AttackComponent)
+        enemy_entities = entity_manager.get_entities_with_components(EnemyComponent, SpriteComponent, HealthComponent)
         enemies_to_destroy = set()
-        for weapon_entity in weapon_entities:
-            weapon_pos = entity_manager.get_component(weapon_entity.id, PositionComponent)
-            weapon_attack = entity_manager.get_component(weapon_entity.id, AttackComponent)
-            
-            # Skip if weapon has no position or attack component
-            if not weapon_pos or not weapon_attack:
-                continue
+
+        for proj_entity in projectile_entities:
+            proj_sprite = entity_manager.get_component(proj_entity.id, SpriteComponent)
+            proj_comp = entity_manager.get_component(proj_entity.id, ProjectileComponent)
+            attack_comp = entity_manager.get_component(proj_entity.id, AttackComponent)
 
             for enemy_entity in enemy_entities:
-                # Skip if enemy is already marked for destruction
-                if enemy_entity.id in enemies_to_destroy:
-                    continue
+                if enemy_entity.id in enemies_to_destroy: continue
+                enemy_sprite = entity_manager.get_component(enemy_entity.id, SpriteComponent)
 
-                enemy_pos = entity_manager.get_component(enemy_entity.id, PositionComponent)
-                enemy_health = entity_manager.get_component(enemy_entity.id, HealthComponent)
+                if proj_sprite.rect.colliderect(enemy_sprite.rect):
+                    enemy_health = entity_manager.get_component(enemy_entity.id, HealthComponent)
+                    enemy_health.current -= attack_comp.damage
 
-                # Skip if enemy has no position or health, or is already dead
-                if not enemy_pos or not enemy_health or enemy_health.status == EntityStatus.DEAD:
-                    continue
-
-                if self._check_collision(weapon_pos, enemy_pos, ENTITY_SIZE, ENTITY_SIZE):
-                    enemy_health.current -= weapon_attack.damage
-                    print(f"Enemy {enemy_entity.id} hit by weapon! Enemy health: {enemy_health.current}")
-                    
                     if enemy_health.current <= 0:
                         enemies_to_destroy.add(enemy_entity.id)
-                        print(f"Enemy {enemy_entity.id} marked for destruction.")
-
-                    # Destroy weapon on hit
-                    entity_manager.destroy_entity(weapon_entity.id)
                     
-                    # An enemy can only be hit by one weapon per frame, so we break
-                    # after destroying the weapon.
-                    break
+                    if proj_comp.pierce > 0:
+                        proj_comp.pierce -= 1
+                    elif proj_comp.bounces > 0:
+                        proj_comp.bounces -= 1
+                        vel = entity_manager.get_component(proj_entity.id, VelocityComponent)
+                        vel.dx *= -1
+                        vel.dy *= -1
+                    else:
+                        entity_manager.destroy_entity(proj_entity.id)
+                        break # Projectile is destroyed, move to next projectile
         
-        # 3. Player and Item collisions
-        for item_entity in item_entities:
-            item_pos = entity_manager.get_component(item_entity.id, PositionComponent)
-            if self._check_collision(player_pos, item_pos, ENTITY_SIZE, EXP_ORB_SIZE):
-                exp_component = entity_manager.get_component(item_entity.id, ExperienceComponent)
-                player_component.experience += exp_component.amount
-                print(f"Player collected {exp_component.amount} EXP! Total EXP: {player_component.experience}")
-                entity_manager.destroy_entity(item_entity.id)
+        self.destroy_enemies_and_drop_exp(entity_manager, enemies_to_destroy)
 
-        # Destroy all enemies marked for destruction and drop EXP
-        for enemy_id in enemies_to_destroy:
+    def handle_hitbox_enemy_collisions(self, entity_manager: EntityManager):
+        hitbox_entities = entity_manager.get_entities_with_components(HitboxComponent, AttackComponent)
+        enemy_entities = entity_manager.get_entities_with_components(EnemyComponent, SpriteComponent, HealthComponent)
+        enemies_to_destroy = set()
+
+        for hitbox_entity in hitbox_entities:
+            hitbox = entity_manager.get_component(hitbox_entity.id, HitboxComponent)
+            attack = entity_manager.get_component(hitbox_entity.id, AttackComponent)
+            pos = entity_manager.get_component(hitbox_entity.id, PositionComponent)
+            
+            # This is a simplified rect for the hitbox arc
+            hitbox_rect = pygame.Rect(pos.x, pos.y - hitbox.width/2, hitbox.width, hitbox.width)
+
+            for enemy_entity in enemy_entities:
+                if enemy_entity.id in enemies_to_destroy: continue
+                enemy_sprite = entity_manager.get_component(enemy_entity.id, SpriteComponent)
+                if hitbox_rect.colliderect(enemy_sprite.rect):
+                    enemy_health = entity_manager.get_component(enemy_entity.id, HealthComponent)
+                    enemy_health.current -= attack.damage
+                    if enemy_health.current <= 0:
+                        enemies_to_destroy.add(enemy_entity.id)
+        
+        self.destroy_enemies_and_drop_exp(entity_manager, enemies_to_destroy)
+
+    def update_hitboxes(self, entity_manager: EntityManager, delta_time: float):
+        for entity in entity_manager.get_entities_with_components(HitboxComponent):
+            hitbox = entity_manager.get_component(entity.id, HitboxComponent)
+            hitbox.timer += delta_time
+            if hitbox.timer >= hitbox.duration:
+                entity_manager.destroy_entity(entity.id)
+
+    def handle_player_item_collisions(self, entity_manager: EntityManager):
+        player_entities = entity_manager.get_entities_with_components(PlayerComponent, SpriteComponent)
+        item_entities = entity_manager.get_entities_with_components(ItemComponent, SpriteComponent)
+
+        if not player_entities: return
+        player_entity = player_entities[0]
+        player_sprite = entity_manager.get_component(player_entity.id, SpriteComponent)
+        player_comp = entity_manager.get_component(player_entity.id, PlayerComponent)
+
+        for item_entity in item_entities:
+            item_sprite = entity_manager.get_component(item_entity.id, SpriteComponent)
+            if player_sprite.rect.colliderect(item_sprite.rect):
+                if entity_manager.has_component(item_entity.id, ExperienceComponent):
+                    exp_comp = entity_manager.get_component(item_entity.id, ExperienceComponent)
+                    player_comp.experience += exp_comp.amount
+                    entity_manager.destroy_entity(item_entity.id)
+
+    def handle_projectile_wall_collisions(self, entity_manager: EntityManager):
+        for entity in entity_manager.get_entities_with_components(ProjectileComponent, PositionComponent, VelocityComponent):
+            pos = entity_manager.get_component(entity.id, PositionComponent)
+            vel = entity_manager.get_component(entity.id, VelocityComponent)
+            proj = entity_manager.get_component(entity.id, ProjectileComponent)
+
+            if pos.x < 0 or pos.x > self.screen_width:
+                if proj.bounces > 0:
+                    proj.bounces -= 1
+                    vel.dx *= -1
+                else:
+                    entity_manager.destroy_entity(entity.id)
+            elif pos.y < 0 or pos.y > self.screen_height:
+                if proj.bounces > 0:
+                    proj.bounces -= 1
+                    vel.dy *= -1
+                else:
+                    entity_manager.destroy_entity(entity.id)
+
+    def destroy_enemies_and_drop_exp(self, entity_manager: EntityManager, enemy_ids: set[int]):
+        for enemy_id in enemy_ids:
             enemy_pos = entity_manager.get_component(enemy_id, PositionComponent)
             enemy_comp = entity_manager.get_component(enemy_id, EnemyComponent)
             if enemy_pos and enemy_comp:
                 self._create_exp_orb(entity_manager, enemy_pos.x, enemy_pos.y, enemy_comp.enemy_type.base_experience_yield)
-            print(f"Destroying enemy {enemy_id}")
             entity_manager.destroy_entity(enemy_id)
 
     def _create_exp_orb(self, entity_manager: EntityManager, x: float, y: float, exp_amount: int):
         orb_entity = entity_manager.create_entity()
         entity_manager.add_component(orb_entity.id, PositionComponent(x=x, y=y))
-        entity_manager.add_component(orb_entity.id, ItemComponent(item_type=ItemType.EXPERIENCE_ORB))
+        entity_manager.add_component(orb_entity.id, ItemComponent(item_id=ItemID.EXPERIENCE_ORB))
         entity_manager.add_component(orb_entity.id, ExperienceComponent(amount=exp_amount))
         
-        # Create a simple sprite for the orb
-        orb_surface = pygame.Surface((EXP_ORB_SIZE, EXP_ORB_SIZE), pygame.SRCALPHA)
-        pygame.draw.circle(orb_surface, (255, 255, 0), (EXP_ORB_SIZE // 2, EXP_ORB_SIZE // 2), EXP_ORB_SIZE // 2)
+        orb_surface = pygame.Surface((10, 10), pygame.SRCALPHA)
+        pygame.draw.circle(orb_surface, (255, 255, 0), (5, 5), 5)
         orb_rect = orb_surface.get_rect(center=(x, y))
         entity_manager.add_component(orb_entity.id, SpriteComponent(surface=orb_surface, rect=orb_rect))
-        print(f"Created EXP orb with {exp_amount} EXP at ({x}, {y})")
-
-    def _check_collision(self, pos1: PositionComponent, pos2: PositionComponent, size1: int, size2: int) -> bool:
-        """
-        Checks for collision between two entities based on their positions and sizes.
-        Using simple Axis-Aligned Bounding Box (AABB) collision detection.
-        """
-        half_size1 = size1 / 2
-        rect1_left = pos1.x - half_size1
-        rect1_right = pos1.x + half_size1
-        rect1_top = pos1.y - half_size1
-        rect1_bottom = pos1.y + half_size1
-
-        half_size2 = size2 / 2
-        rect2_left = pos2.x - half_size2
-        rect2_right = pos2.x + half_size2
-        rect2_top = pos2.y - half_size2
-        rect2_bottom = pos2.y + half_size2
-
-        if (rect1_right >= rect2_left and
-            rect1_left <= rect2_right and
-            rect1_bottom >= rect2_top and
-            rect1_top <= rect2_bottom):
-            return True
-        return False
