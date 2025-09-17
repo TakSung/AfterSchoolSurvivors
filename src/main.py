@@ -18,6 +18,7 @@ from systems.enemy_spawner_system import EnemySpawnerSystem
 from systems.player_attack_system import PlayerAttackSystem
 from systems.player_level_system import PlayerLevelSystem
 from systems.item_system import ItemSystem
+from systems.trap_system import TrapSystem
 from entities.weapons import SoccerBall, Basketball, BaseballBat
 from entities.abilities import SoccerShoes, BasketballShoes, RedGinseng, Milk
 
@@ -45,6 +46,7 @@ def main():
     player_attack_system = PlayerAttackSystem()
     player_level_system = PlayerLevelSystem()
     item_system = ItemSystem(entity_manager)
+    trap_system = TrapSystem(entity_manager, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # Create player entity
     player_entity = entity_manager.create_entity()
@@ -103,6 +105,7 @@ def main():
         # Update systems
         input_system.update(entity_manager, delta_time)
         item_system.update(delta_time)
+        trap_system.update(delta_time)
         enemy_spawner_system.update(entity_manager, delta_time)
         enemy_movement_system.update(entity_manager, delta_time)
         player_attack_system.update(entity_manager, delta_time)
