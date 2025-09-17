@@ -19,3 +19,6 @@ class PlayerComponent(Component):
     invulnerability_timer: float = 0.0
     invulnerability_cooldown: float = 10.0
     invulnerability_duration: float = 1.0
+
+    # for baseball bat synergy
+    trigger_bat_swing: bool = False
