@@ -68,8 +68,32 @@ class EnemyState(IntEnum):
         return ["생성중", "대기", "추적", "공격", "기절", "사망"][self.value]
 
 class ItemType(IntEnum):
+    WEAPON = 0
+    ABILITY = 1
+    MISC = 2
+
+class ItemID(IntEnum):
     EXPERIENCE_ORB = 0
+    SOCCER_BALL = 1
+    BASKETBALL = 2
+    BASEBALL_BAT = 3
+    SOCCER_SHOES = 4
+    BASKETBALL_SHOES = 5
+    RED_GINSENG = 6
+    MILK = 7
 
     @property
     def display_name(self) -> str:
-        return ["경험치 구슬"][self.value]
+        return [
+            "경험치 구슬", "축구공", "농구공", "야구 배트",
+            "축구화", "농구화", "홍삼", "우유"
+        ][self.value]
+
+    @property
+    def item_type(self) -> ItemType:
+        if self.value in [ItemID.SOCCER_BALL, ItemID.BASKETBALL, ItemID.BASEBALL_BAT]:
+            return ItemType.WEAPON
+        elif self.value in [ItemID.SOCCER_SHOES, ItemID.BASKETBALL_SHOES, ItemID.RED_GINSENG, ItemID.MILK]:
+            return ItemType.ABILITY
+        else:
+            return ItemType.MISC

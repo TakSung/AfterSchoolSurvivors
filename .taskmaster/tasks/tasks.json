@@ -293,7 +293,7 @@
             "description": "경험치 관리를 위한 Experience 클래스를 생성하고 기본적인 경험치 획득 및 저장 로직을 구현합니다.",
             "dependencies": [],
             "details": "Experience 클래스 생성, 현재 경험치/레벨/다음 레벨까지 필요한 경험치 속성 정의, 경험치 획득 메서드 구현, 레벨별 필요 경험치 곡선 공식 설계(지수 증가), 경험치 저장 및 로드 기능",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -304,7 +304,7 @@
               "4.1"
             ],
             "details": "적 처치 이벤트 감지, 적 유형별 경험치 값 설정, 경험치 획득 시 시각적 피드백(경험치 텍스트 표시), Experience 클래스와의 연동, 경험치 획득 사운드 효과 준비",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -315,16 +315,14 @@
               "4.2"
             ],
             "details": "레벨업 조건 체크 로직, 레벨업 발생 시 게임 상태 일시정지, 레벨업 알림 시스템, 게임 루프 일시정지/재개 메커니즘, 레벨업 사운드 및 시각 효과",
-            "status": "pending",
+            "status": "deffer",
             "testStrategy": ""
           },
           {
             "id": 4,
             "title": "아이템 선택 UI 시스템 구현",
             "description": "레벨업 시 표시되는 아이템 선택 인터페이스를 구현합니다.",
-            "dependencies": [
-              "4.3"
-            ],
+            "dependencies": [],
             "details": "아이템 선택 UI 패널 생성, 2개의 무작위 아이템 선택지 표시 로직, 아이템 아이콘/이름/설명 렌더링, 마우스 클릭 또는 키보드 입력으로 아이템 선택, 선택 시 하이라이트 효과",
             "status": "pending",
             "testStrategy": ""
@@ -349,9 +347,7 @@
         "details": "Item 베이스 클래스 및 7개 아이템 클래스 구현. 무기: 축구공, 농구공, 야구배트. 능력: 축구화, 농구화, 홍삼, 우유. Inventory 클래스(6칸 제한), 동일 아이템 획득 시 레벨업 로직(최대 5레벨), 각 아이템별 레벨별 효과 정의. 아이템 효과 적용 시스템(스탯 버프, 공격 강화 등).",
         "testStrategy": "아이템 획득, 슬롯 배치, 동일 아이템 레벨업, 각 아이템 효과 적용 확인. 인벤토리 가득 찬 상황 처리 테스트.",
         "priority": "medium",
-        "dependencies": [
-          4
-        ],
+        "dependencies": [],
         "status": "pending",
         "subtasks": [
           {
@@ -360,7 +356,7 @@
             "description": "아이템 시스템의 핵심이 되는 베이스 클래스와 아이템 타입들을 정의합니다.",
             "dependencies": [],
             "details": "Item 추상 베이스 클래스 구현 (id, name, type, level, max_level, description 속성), ItemType 열거형 정의 (WEAPON, ABILITY), ItemID 열거형 정의 (7개 아이템), 아이템 레벨별 효과 계산을 위한 추상 메서드 정의 (get_effect, apply_effect)",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -371,7 +367,7 @@
               "5.1"
             ],
             "details": "WeaponItem 베이스 클래스 구현, SoccerBall 클래스 (투사체 속도 증가, 레벨당 10% 증가), BasketballItem 클래스 (투사체 크기 증가, 레벨당 15% 증가), BaseballBat 클래스 (공격력 증가, 레벨당 20% 증가), 각 무기별 레벨별 효과 테이블 정의",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -382,7 +378,7 @@
               "5.1"
             ],
             "details": "AbilityItem 베이스 클래스 구현, SoccerShoes 클래스 (이동속도 증가, 레벨당 8% 증가), BasketballShoes 클래스 (점프력/회피 증가, 레벨당 10% 증가), RedGinseng 클래스 (최대체력 증가, 레벨당 25hp 증가), Milk 클래스 (체력재생 속도 증가, 레벨당 초당 2hp 증가), 각 능력별 레벨별 효과 테이블 정의",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -393,7 +389,7 @@
               "5.1"
             ],
             "details": "Inventory 클래스 구현 (6개 슬롯 배열), add_item 메서드 (동일 아이템 레벨업 로직 포함), remove_item 메서드, get_item 메서드, is_full 속성, get_items_by_type 메서드, 슬롯 인덱스 관리 시스템, 인벤토리 직렬화/역직렬화 기능",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -406,7 +402,7 @@
               "5.4"
             ],
             "details": "레벨업 로직 구현 (동일 아이템 획득 시 level+1), 최대 레벨 제한 (5레벨), 레벨업 불가능 시 처리 로직, level_up 메서드 구현, can_level_up 메서드 구현, 레벨업 시 이펙트 생성 시스템, 레벨별 효과 증가 공식 적용",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -425,7 +421,9 @@
             "title": "인벤토리 가득 참 예외 처리 및 아이템 획득 시스템",
             "description": "인벤토리가 가득 찬 상황의 예외 처리와 아이템 획득 플로우를 구현합니다.",
             "dependencies": [
-              "5.6"
+              "5.6",
+              "4.3",
+              "4.4"
             ],
             "details": "InventoryFullException 커스텀 예외 클래스 정의, 아이템 획득 시 인벤토리 상태 확인 로직, 가득 찬 상황에서 동일 아이템 레벨업 우선 처리, 새 아이템 획득 불가 시 알림 시스템, 아이템 드롭 처리 (필요 시), 아이템 획득 우선순위 시스템 (레벨업 > 새 아이템), 전체 아이템 시스템 통합 테스트",
             "status": "pending",
@@ -831,7 +829,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-09-03T11:24:29.575Z",
+      "updated": "2025-09-17T10:50:35.259Z",
       "description": "Tasks for master context"
     }
   }

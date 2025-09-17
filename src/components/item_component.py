@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from core.component import Component
-from .enums import ItemType
+from .enums import ItemID
 
 @dataclass
 class ItemComponent(Component):
-    item_type: ItemType
+    item_id: ItemID
