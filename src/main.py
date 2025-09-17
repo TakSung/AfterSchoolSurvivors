@@ -69,7 +69,7 @@ def main():
 
     running = True
     while running:
-        delta_time = clock.tick(FPS) / 1000.0
+        delta_time = clock.tick(FPS) / 60.0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

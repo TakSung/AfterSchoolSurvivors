@@ -56,7 +56,7 @@ class EnemySpawnerSystem(ISystem):
         entity_manager.add_component(enemy_entity.id, VelocityComponent(dx=0, dy=0))
 
         # Health
-        entity_manager.add_component(enemy_entity.id, HealthComponent(current=100, maximum=100, status=EntityStatus.ALIVE))
+        entity_manager.add_component(enemy_entity.id, HealthComponent(base_maximum=100, current=100, maximum=100, status=EntityStatus.ALIVE))
 
         # Enemy
         entity_manager.add_component(enemy_entity.id, EnemyComponent(enemy_type=EnemyType.KOREAN_TEACHER, speed=random.randint(1, 3)))
