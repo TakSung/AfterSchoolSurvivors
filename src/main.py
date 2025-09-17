@@ -6,7 +6,9 @@ from components.position_component import PositionComponent
 from components.velocity_component import VelocityComponent
 from components.health_component import HealthComponent
 from components.sprite_component import SpriteComponent
-from components.enums import EntityStatus
+from components.attack_component import AttackComponent
+from components.inventory_component import InventoryComponent
+from components.enums import EntityStatus, ItemID
 from systems.input_system import InputSystem
 from systems.movement_system import MovementSystem
 from systems.render_system import RenderSystem
@@ -15,6 +17,9 @@ from systems.enemy_movement_system import EnemyMovementSystem
 from systems.enemy_spawner_system import EnemySpawnerSystem
 from systems.player_attack_system import PlayerAttackSystem
 from systems.player_level_system import PlayerLevelSystem
+from systems.item_system import ItemSystem
+from entities.weapons import SoccerBall, Basketball, BaseballBat
+from entities.abilities import SoccerShoes, BasketballShoes, RedGinseng, Milk
 
 def main():
     pygame.init()
@@ -39,6 +44,7 @@ def main():
     enemy_spawner_system = EnemySpawnerSystem(SCREEN_WIDTH, SCREEN_HEIGHT)
     player_attack_system = PlayerAttackSystem()
     player_level_system = PlayerLevelSystem()
+    item_system = ItemSystem(entity_manager)
 
     # Create player entity
     player_entity = entity_manager.create_entity()
@@ -46,6 +52,8 @@ def main():
     entity_manager.add_component(player_entity.id, VelocityComponent(dx=0, dy=0))
     entity_manager.add_component(player_entity.id, HealthComponent(current=100, maximum=100, status=EntityStatus.ALIVE))
     entity_manager.add_component(player_entity.id, PlayerComponent())
+    entity_manager.add_component(player_entity.id, InventoryComponent())
+    entity_manager.add_component(player_entity.id, AttackComponent())
     try:
         player_surface = pygame.image.load("assets/player.svg").convert_alpha()
         player_surface = pygame.transform.scale(player_surface, (50, 50))
@@ -67,9 +75,34 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                # Item adding for testing
+                inventory = entity_manager.get_component(player_entity.id, InventoryComponent)
+                if event.key == pygame.K_1:
+                    inventory.add_item(SoccerBall())
+                    print("Added Soccer Ball")
+                elif event.key == pygame.K_2:
+                    inventory.add_item(Basketball())
+                    print("Added Basketball")
+                elif event.key == pygame.K_3:
+                    inventory.add_item(BaseballBat())
+                    print("Added Baseball Bat")
+                elif event.key == pygame.K_4:
+                    inventory.add_item(SoccerShoes())
+                    print("Added Soccer Shoes")
+                elif event.key == pygame.K_5:
+                    inventory.add_item(BasketballShoes())
+                    print("Added Basketball Shoes")
+                elif event.key == pygame.K_6:
+                    inventory.add_item(RedGinseng())
+                    print("Added Red Ginseng")
+                elif event.key == pygame.K_7:
+                    inventory.add_item(Milk())
+                    print("Added Milk")
+
 
         # Update systems
         input_system.update(entity_manager, delta_time)
+        item_system.update(delta_time)
         enemy_spawner_system.update(entity_manager, delta_time)
         enemy_movement_system.update(entity_manager, delta_time)
         player_attack_system.update(entity_manager, delta_time)

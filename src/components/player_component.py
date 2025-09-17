@@ -22,3 +22,7 @@ class PlayerComponent(Component):
 
     # for baseball bat synergy
     trigger_bat_swing: bool = False
+
+    # for trap debuff
+    slow_debuff_timer: float = 0.0
+    slow_debuff_stacks: int = 0
