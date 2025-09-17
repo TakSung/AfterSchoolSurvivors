@@ -3,7 +3,7 @@ from core.component import Component
 
 @dataclass
 class AttackComponent(Component):
-    base_damage: int
-    damage: int
-    attack_speed: float
-    attack_range: float
+    base_damage: int = 0
+    damage: int = 0
+    attack_speed: float = 0.0
+    attack_range: float = 0.0
