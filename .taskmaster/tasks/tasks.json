@@ -348,7 +348,7 @@
         "testStrategy": "아이템 획득, 슬롯 배치, 동일 아이템 레벨업, 각 아이템 효과 적용 확인. 인벤토리 가득 찬 상황 처리 테스트.",
         "priority": "medium",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -426,7 +426,7 @@
               "4.4"
             ],
             "details": "InventoryFullException 커스텀 예외 클래스 정의, 아이템 획득 시 인벤토리 상태 확인 로직, 가득 찬 상황에서 동일 아이템 레벨업 우선 처리, 새 아이템 획득 불가 시 알림 시스템, 아이템 드롭 처리 (필요 시), 아이템 획득 우선순위 시스템 (레벨업 > 새 아이템), 전체 아이템 시스템 통합 테스트",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -829,7 +829,7 @@
     ],
     "metadata": {
       "created": "2025-08-06T10:05:12.101Z",
-      "updated": "2025-09-17T10:52:53.643Z",
+      "updated": "2025-09-17T10:54:39.676Z",
       "description": "Tasks for master context"
     }
   }
