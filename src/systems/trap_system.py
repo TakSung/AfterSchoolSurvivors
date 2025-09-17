@@ -1,13 +1,13 @@
 import pygame
 import random
-from ..core.system import System
-from ..core.entity_manager import EntityManager
-from ..components.trap_component import TrapComponent
-from ..components.player_component import PlayerComponent
-from ..components.position_component import PositionComponent
-from ..components.sprite_component import SpriteComponent
+from core.system import ISystem
+from core.entity_manager import EntityManager
+from components.trap_component import TrapComponent
+from components.player_component import PlayerComponent
+from components.position_component import PositionComponent
+from components.sprite_component import SpriteComponent
 
-class TrapSystem(System):
+class TrapSystem(ISystem):
     def __init__(self, entity_manager: EntityManager, screen_width: int, screen_height: int):
         self.entity_manager = entity_manager
         self.screen_width = screen_width

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from .item import Item
-from ..components.enums import ItemID, ItemType
+from components.enums import ItemID, ItemType
 
 @dataclass
 class WeaponItem(Item):

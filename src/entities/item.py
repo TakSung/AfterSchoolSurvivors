@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from ..components.enums import ItemID, ItemType
+from components.enums import ItemID, ItemType
 
 @dataclass
 class Item(ABC):

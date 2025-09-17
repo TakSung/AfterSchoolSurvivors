@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional, TYPE_CHECKING
-from ..core.component import Component
-from ..entities.item import Item
+from core.component import Component
+from entities.item import Item
 
-from ..core.exceptions import InventoryFullException
+from core.exceptions import InventoryFullException
 
 if TYPE_CHECKING:
     from ..components.enums import ItemType

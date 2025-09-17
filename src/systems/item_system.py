@@ -1,12 +1,12 @@
-from ..core.system import System
-from ..core.entity_manager import EntityManager
-from ..components.inventory_component import InventoryComponent
-from ..components.player_component import PlayerComponent
-from ..components.attack_component import AttackComponent
-from ..components.health_component import HealthComponent
-from ..components.enums import ItemID, ItemType
+from core.system import ISystem
+from core.entity_manager import EntityManager
+from components.inventory_component import InventoryComponent
+from components.player_component import PlayerComponent
+from components.attack_component import AttackComponent
+from components.health_component import HealthComponent
+from components.enums import ItemID, ItemType
 
-class ItemSystem(System):
+class ItemSystem(ISystem):
     def __init__(self, entity_manager: EntityManager):
         self.entity_manager = entity_manager
 
