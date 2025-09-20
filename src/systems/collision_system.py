@@ -108,10 +108,8 @@ class CollisionSystem(ISystem):
                 # 2. Angle Check
                 enemy_angle_rad = math.atan2(enemy_pos.y - pos.y, enemy_pos.x - pos.x)
                 
-                # Normalize angles to be within -pi to pi
                 angle_diff = enemy_angle_rad - hitbox_angle_rad
-                while angle_diff > math.pi: angle_diff -= 2 * math.pi
-                while angle_diff < -math.pi: angle_diff += 2 * math.pi
+                angle_diff = (angle_diff + math.pi) % (2 * math.pi) - math.pi
                 
                 arc_angle_rad = math.radians(hitbox.height) # hitbox.height is used as arc angle
                 

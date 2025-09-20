@@ -94,4 +94,4 @@ class PlayerAttackSystem(ISystem):
         hitbox_entity = entity_manager.create_entity()
         entity_manager.add_component(hitbox_entity.id, PositionComponent(x=player_pos.x, y=player_pos.y))
         entity_manager.add_component(hitbox_entity.id, AttackComponent(damage=attack_comp.damage))
-        entity_manager.add_component(hitbox_entity.id, HitboxComponent(width=70, height=attack_comp.angle, angle=math.degrees(angle), duration=0.2))
+        entity_manager.add_component(hitbox_entity.id, HitboxComponent(width=120, height=attack_comp.angle, angle=math.degrees(angle), duration=0.2))
