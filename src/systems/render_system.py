@@ -50,7 +50,7 @@ class RenderSystem(ISystem):
             start_angle = math.radians(hitbox.angle - hitbox.height / 2)
             end_angle = math.radians(hitbox.angle + hitbox.height / 2)
 
-            pygame.draw.arc(arc_surface, (255, 255, 255, 100), arc_rect, start_angle, end_angle, 5)
+            pygame.draw.arc(arc_surface, (255, 255, 255, 100), arc_rect, -end_angle, -start_angle, 5)
             self.screen.blit(arc_surface, (0, 0))
 
         # Draw Player UI (XP Bar and Level)
