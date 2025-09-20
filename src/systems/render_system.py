@@ -2,11 +2,13 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 import pygame
+import math
 
 from core.system import ISystem
 from components.position_component import PositionComponent
 from components.sprite_component import SpriteComponent
 from components.player_component import PlayerComponent
+from components.hitbox_component import HitboxComponent
 
 if TYPE_CHECKING:
     from core.entity_manager import EntityManager
@@ -32,6 +34,24 @@ class RenderSystem(ISystem):
 
             sprite.rect.center = (pos.x, pos.y)
             self.screen.blit(sprite.surface, sprite.rect)
+
+        # Draw hitboxes for visual debugging
+        for entity in entity_manager.get_entities_with_components(HitboxComponent, PositionComponent):
+            pos = entity_manager.get_component(entity.id, PositionComponent)
+            hitbox = entity_manager.get_component(entity.id, HitboxComponent)
+
+            # Create a surface for the arc since pygame.draw.arc doesn't support alpha
+            arc_surface = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+            
+            # Define the bounding rectangle for the arc
+            arc_rect = pygame.Rect(pos.x - hitbox.width, pos.y - hitbox.width, hitbox.width * 2, hitbox.width * 2)
+
+            # Calculate start and end angles
+            start_angle = math.radians(hitbox.angle - hitbox.height / 2)
+            end_angle = math.radians(hitbox.angle + hitbox.height / 2)
+
+            pygame.draw.arc(arc_surface, (255, 255, 255, 100), arc_rect, start_angle, end_angle, 5)
+            self.screen.blit(arc_surface, (0, 0))
 
         # Draw Player UI (XP Bar and Level)
         player_entities = entity_manager.get_entities_with_components(PlayerComponent)

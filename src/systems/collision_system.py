@@ -93,13 +93,29 @@ class CollisionSystem(ISystem):
             attack = entity_manager.get_component(hitbox_entity.id, AttackComponent)
             pos = entity_manager.get_component(hitbox_entity.id, PositionComponent)
             
-            # This is a simplified rect for the hitbox arc
-            hitbox_rect = pygame.Rect(pos.x, pos.y - hitbox.width/2, hitbox.width, hitbox.width)
-
+            hitbox_angle_rad = math.radians(hitbox.angle)
+            
             for enemy_entity in enemy_entities:
                 if enemy_entity.id in enemies_to_destroy: continue
-                enemy_sprite = entity_manager.get_component(enemy_entity.id, SpriteComponent)
-                if hitbox_rect.colliderect(enemy_sprite.rect):
+                
+                enemy_pos = entity_manager.get_component(enemy_entity.id, PositionComponent)
+                
+                # 1. Distance Check
+                distance_sq = (enemy_pos.x - pos.x)**2 + (enemy_pos.y - pos.y)**2
+                if distance_sq > hitbox.width**2: # hitbox.width is used as radius
+                    continue
+
+                # 2. Angle Check
+                enemy_angle_rad = math.atan2(enemy_pos.y - pos.y, enemy_pos.x - pos.x)
+                
+                # Normalize angles to be within -pi to pi
+                angle_diff = enemy_angle_rad - hitbox_angle_rad
+                while angle_diff > math.pi: angle_diff -= 2 * math.pi
+                while angle_diff < -math.pi: angle_diff += 2 * math.pi
+                
+                arc_angle_rad = math.radians(hitbox.height) # hitbox.height is used as arc angle
+                
+                if abs(angle_diff) <= arc_angle_rad / 2:
                     enemy_health = entity_manager.get_component(enemy_entity.id, HealthComponent)
                     enemy_health.current -= attack.damage
                     if enemy_health.current <= 0:

@@ -1,148 +1,169 @@
-
 import pygame
 import sys
 import os
 import math
-from dataclasses import dataclass
+from dataclasses import field
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..', 'src')))
 
 from core.entity_manager import EntityManager
+from core.system import ISystem
+
+# Components
 from components.position_component import PositionComponent
 from components.health_component import HealthComponent
 from components.sprite_component import SpriteComponent
+from components.player_component import PlayerComponent
+from components.enemy_component import EnemyComponent
+from components.attack_component import AttackComponent
+from components.enums import EnemyType, EntityStatus
+
+# Entities
 from entities.weapons import BaseballBat
 
-# --- Test-specific Components and Systems ---
+# Systems
+from systems.player_attack_system import PlayerAttackSystem
+from systems.collision_system import CollisionSystem
+from systems.render_system import RenderSystem
+from systems.movement_system import MovementSystem
+from systems.enemy_movement_system import EnemyMovementSystem
 
-@dataclass
-class MockEnemy:
-    """A simple data class for a mock enemy."""
-    id: int
-    health: HealthComponent
-    pos: PositionComponent
-
-@dataclass
-class MockBaseballBat:
-    """A mock for the baseball bat item."""
-    level: int = 0
-
-    def level_up(self):
-        self.level += 1
 
 class TestGame:
-    """A class to manage the test setup and game loop."""
+    """
+    An integration test class to visually verify the baseball bat's functionality
+    within the ECS architecture.
+    """
     def __init__(self):
         pygame.init()
-        self.screen_width = 800
-        self.screen_height = 600
+        self.screen_width = 1280
+        self.screen_height = 720
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        pygame.display.set_caption("Visual Test for Baseball Bat")
+        pygame.display.set_caption("Integration Test for Baseball Bat")
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 30)
 
+        # ECS setup
         self.entity_manager = EntityManager()
-        self.player_pos = PositionComponent(x=self.screen_width / 2, y=self.screen_height / 2)
-        self.bat = MockBaseballBat()
-        self.enemies: list[MockEnemy] = []
-        self.damage_texts: list[tuple[str, tuple[int, int], float]] = []
+        self.render_system = RenderSystem(self.screen)
+        self.player_attack_system = PlayerAttackSystem()
+        self.collision_system = CollisionSystem(self.screen_width, self.screen_height)
+        self.movement_system = MovementSystem()
+        self.enemy_movement_system = EnemyMovementSystem()
+
+        self.player_id = -1
+        self.bat_item = BaseballBat()
 
         self._setup_test_entities()
 
     def _setup_test_entities(self):
         """Creates the player and enemies for the test."""
-        # Player is conceptually at the center, no entity needed for this test
+        # --- Create Player ---
+        player_entity = self.entity_manager.create_entity()
+        self.player_id = player_entity.id
+        
+        player_pos = PositionComponent(x=self.screen_width / 2, y=self.screen_height / 2)
+        player_health = HealthComponent(base_maximum=100, current=100, maximum=100)
+        player_comp = PlayerComponent()
+        
+        # Player sprite
+        player_surface = pygame.Surface((30, 30), pygame.SRCALPHA)
+        pygame.draw.circle(player_surface, (0, 200, 0), (15, 15), 15)
+        player_rect = player_surface.get_rect(center=(player_pos.x, player_pos.y))
+        player_sprite = SpriteComponent(surface=player_surface, rect=player_rect)
 
-        # Enemy inside 90-degree attack arc (in front of player)
-        enemy_in_range = self.entity_manager.create_entity()
-        pos_in = PositionComponent(x=self.player_pos.x, y=self.player_pos.y - 100)
-        health_in = HealthComponent(base_maximum=50, current=50, maximum=50)
-        self.enemies.append(MockEnemy(id=enemy_in_range.id, health=health_in, pos=pos_in))
+        # Player attack component
+        attack_comp = AttackComponent(
+            damage=10, 
+            attack_speed=1.0, 
+            weapon_type="baseball_bat",
+            angle=90
+        )
 
-        # Enemy outside 90-degree attack arc (behind player)
-        enemy_out_of_range = self.entity_manager.create_entity()
-        pos_out = PositionComponent(x=self.player_pos.x, y=self.player_pos.y + 100)
-        health_out = HealthComponent(base_maximum=50, current=50, maximum=50)
-        self.enemies.append(MockEnemy(id=enemy_out_of_range.id, health=health_out, pos=pos_out))
+        self.entity_manager.add_component(self.player_id, player_pos)
+        self.entity_manager.add_component(self.player_id, player_health)
+        self.entity_manager.add_component(self.player_id, player_comp)
+        self.entity_manager.add_component(self.player_id, player_sprite)
+        self.entity_manager.add_component(self.player_id, attack_comp)
+
+        # --- Create Enemies ---
+        positions = [
+            (player_pos.x, player_pos.y - 100), # In front
+            (player_pos.x, player_pos.y + 100), # Behind
+            (player_pos.x - 150, player_pos.y), # Left
+            (player_pos.x + 150, player_pos.y), # Right
+        ]
+        for i, (x, y) in enumerate(positions):
+            enemy_entity = self.entity_manager.create_entity()
+            enemy_pos = PositionComponent(x=x, y=y)
+            enemy_health = HealthComponent(base_maximum=50, current=50, maximum=50)
+            enemy_comp = EnemyComponent(enemy_type=EnemyType.KOREAN_TEACHER) # Dummy type
+            
+            enemy_surface = pygame.Surface((20, 20), pygame.SRCALPHA)
+            pygame.draw.rect(enemy_surface, (200, 0, 0), (0, 0, 20, 20))
+            enemy_rect = enemy_surface.get_rect(center=(x, y))
+            enemy_sprite = SpriteComponent(surface=enemy_surface, rect=enemy_rect)
+
+            self.entity_manager.add_component(enemy_entity.id, enemy_pos)
+            self.entity_manager.add_component(enemy_entity.id, enemy_health)
+            self.entity_manager.add_component(enemy_entity.id, enemy_comp)
+            self.entity_manager.add_component(enemy_entity.id, enemy_sprite)
 
     def handle_input(self, event):
-        """Handles user input for the test."""
+        """Handles user input for leveling up the bat."""
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:
-                if self.bat.level == 0:
-                    self.bat.level = 1
-                else:
-                    self.bat.level_up()
-                print(f"Baseball Bat leveled up to {self.bat.level}")
-            elif event.key == pygame.K_SPACE:
-                self.perform_attack()
-                print("Attack performed.")
-
-    def perform_attack(self):
-        """Simulates a baseball bat attack."""
-        mouse_pos = pygame.mouse.get_pos()
-        attack_angle_rad = math.atan2(mouse_pos[1] - self.player_pos.y, mouse_pos[0] - self.player_pos.x)
-
-        for enemy in self.enemies:
-            enemy_angle_rad = math.atan2(enemy.pos.y - self.player_pos.y, enemy.pos.x - self.player_pos.x)
-            angle_diff = abs(math.degrees(attack_angle_rad - enemy_angle_rad))
-            if angle_diff > 180:
-                angle_diff = 360 - angle_diff
-
-            # Check if within 90-degree arc (45 degrees on each side)
-            if angle_diff <= 45:
-                damage = 10 * self.bat.level # Level-based damage
-                enemy.health.current -= damage
-                # Add damage text to be rendered
-                text_pos = (int(enemy.pos.x), int(enemy.pos.y - 20))
-                self.damage_texts.append((str(damage), text_pos, pygame.time.get_ticks()))
+                if self.bat_item.level < self.bat_item.max_level:
+                    self.bat_item.level_up()
+                    # Update player's attack component with new stats
+                    attack_comp = self.entity_manager.get_component(self.player_id, AttackComponent)
+                    effect = self.bat_item.get_effect()
+                    attack_comp.angle = effect["angle"]
+                    attack_comp.attack_speed = 1.0 + effect["attack_speed_increase"]
+                    print(f"Baseball Bat leveled up to {self.bat_item.level}. Angle: {attack_comp.angle}, Speed Multi: {attack_comp.attack_speed}")
 
     def update(self):
-        """Updates the state of damage texts."""
-        now = pygame.time.get_ticks()
-        # Remove damage texts that have been displayed for more than 0.5 seconds
-        self.damage_texts = [dt for dt in self.damage_texts if now - dt[2] < 500]
+        """Run all ECS systems."""
+        delta_time = self.clock.get_time() / 1000.0
+        self.player_attack_system.update(self.entity_manager, delta_time)
+        self.movement_system.update(self.entity_manager, delta_time)
+        self.enemy_movement_system.update(self.entity_manager, self.player_id)
+        self.collision_system.update(self.entity_manager, delta_time)
+        # Render system is called in the main loop's render phase
 
     def render(self):
-        """Renders the game state to the screen."""
-        self.screen.fill((10, 10, 30)) # Dark blue background
-
-        # Draw player
-        pygame.draw.circle(self.screen, (0, 200, 0), (int(self.player_pos.x), int(self.player_pos.y)), 15)
-
-        # Draw enemies
-        for enemy in self.enemies:
-            color = (200, 0, 0) if enemy.health.current > 0 else (80, 80, 80)
-            pygame.draw.rect(self.screen, color, (enemy.pos.x - 10, enemy.pos.y - 10, 20, 20))
-
-        # Draw damage texts
-        for text, pos, start_time in self.damage_texts:
-            text_surface = self.font.render(text, True, (255, 255, 255))
-            self.screen.blit(text_surface, pos)
-
+        """Render the game and UI information."""
+        delta_time = self.clock.get_time() / 1000.0
+        self.render_system.update(self.entity_manager, delta_time)
+        
         # --- Render UI based on requirements ---
         # 1. Bat Level
-        level_text = f"Baseball Bat Level: {self.bat.level}"
+        level_text = f"Bat Level: {self.bat_item.level} (Press '1' to Level Up)"
         level_surface = self.font.render(level_text, True, (255, 255, 255))
-        self.screen.blit(level_surface, (self.screen_width - level_surface.get_width() - 10, self.screen_height - level_surface.get_height() - 10))
+        self.screen.blit(level_surface, (10, 10))
 
         # 2. Enemy Health Info
-        for i, enemy in enumerate(self.enemies):
-            health_text = f"Enemy {i+1} Health: {enemy.health.current}/{enemy.health.maximum}"
-            health_surface = self.font.render(health_text, True, (200, 200, 200))
-            self.screen.blit(health_surface, (10, 10 + i * 30))
+        enemy_entities = self.entity_manager.get_entities_with_components(EnemyComponent, HealthComponent)
+        for i, enemy in enumerate(enemy_entities):
+            health = self.entity_manager.get_component(enemy.id, HealthComponent)
+            health_text = f"Enemy {i+1} Health: {health.current}/{health.maximum}"
+            color = (255, 100, 100) if health.current > 0 else (100, 100, 100)
+            health_surface = self.font.render(health_text, True, color)
+            self.screen.blit(health_surface, (10, 40 + i * 30))
             
         # 3. Instructions
         instructions = [
-            "--- CONTROLS ---",
-            "1: Level up Bat",
-            "SPACE: Attack towards mouse",
+            "--- VISUAL TEST ---",
+            "Bat should swing automatically towards mouse.",
+            "Swing arc should be visible.",
+            "Enemies in arc should take damage.",
+            "Leveling up should increase arc size and speed.",
             "ESC: Quit"
         ]
         for i, line in enumerate(instructions):
             inst_surface = self.font.render(line, True, (255, 215, 0))
-            self.screen.blit(inst_surface, (10, 100 + i * 30))
+            self.screen.blit(inst_surface, (self.screen_width - inst_surface.get_width() - 10, 10 + i * 30))
 
         pygame.display.flip()
 
@@ -163,6 +184,10 @@ class TestGame:
         sys.exit()
 
 def main():
+    if "pygame" not in sys.modules:
+        print("Pygame is not installed or could not be imported. Please install it to run this visual test.")
+        return
+        
     test_game = TestGame()
     test_game.run()
 
