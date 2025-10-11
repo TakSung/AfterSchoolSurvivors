@@ -88,8 +88,16 @@ def main():
                     inventory.add_item(Basketball())
                     print("Added Basketball")
                 elif event.key == pygame.K_3:
-                    inventory.add_item(BaseballBat())
-                    print("Added Baseball Bat")
+                    bat_item = next((item for item in inventory.items if item and item.item_id == ItemID.BASEBALL_BAT), None)
+                    if bat_item is None:
+                        inventory.add_item(BaseballBat(level=1))
+                        print("Added Baseball Bat (Level 1)")
+                    else:
+                        if bat_item.level < bat_item.max_level:
+                            bat_item.level += 1
+                            print(f"Leveled up Baseball Bat to Level {bat_item.level}")
+                        else:
+                            print("Baseball Bat is already at max level.")
                 elif event.key == pygame.K_4:
                     inventory.add_item(SoccerShoes())
                     print("Added Soccer Shoes")

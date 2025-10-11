@@ -137,4 +137,25 @@ DATA, RENDER, 충돌,
 1. 위 아래 공격 방향이 반대로 됨
 2. 공격이 적에게 닿질 않음 - 데미지가 안들어감감
 
-문제상황
+
+
+
+# 1011 목표
+목표: main.py에 야구 빠따 기능 추가
+현황: 야구 배트 뺴고 다른 기능은 추가 완료하여 건들 필요 없음
+세부 요청: 
+배트 스윙 모션 추가
+3번키를 눌렀을때 야구배트가 소환하게 한다
+다시누를때마 무기 레벨이 증가
+BaseballBat, HitboxComponent 사용하여 기존 코드 업데이트
+작업 순서
+1. 목표 분석
+2. 현황 분석
+3. 작업 계획 세우기
+4. 사용자 피드백 수용(작업 계획에 대한 피드백)
+5. 기능 추가
+6. 디버깅
+
+from components.hitbox_component import HitboxComponent
+from entities.weapons import BaseballBat 를 사용하여 적용 
+tests\total\system\test_baseball_bat_integration.py 참고
