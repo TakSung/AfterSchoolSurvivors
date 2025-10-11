@@ -37,10 +37,10 @@ class KoreanTeacher(Enemy):
         
         return {
             # 이동 관련 매개변수  
-            "kt_approach_speed": 10.0,           # 접근 속도 (픽셀/프레임)
-            "kt_min_attack_distance": 60.0,     # 최소 공격 거리 (픽셀)
-            "kt_max_attack_distance": 100.0,    # 최대 공격 거리 (픽셀)  
-            "kt_optimal_distance": 80.0,        # 최적 공격 거리 (픽셀)
+            "kt_approach_speed": 100.0,           # 접근 속도 (픽셀/프레임)
+            "kt_min_attack_distance": 600.0,     # 최소 공격 거리 (픽셀)
+            "kt_max_attack_distance": 1000.0,    # 최대 공격 거리 (픽셀)  
+            "kt_optimal_distance": 800.0,        # 최적 공격 거리 (픽셀)
             
             # 상태 전환 관련
             "kt_attack_preparation_time": 1.5,  # 공격 준비 시간 (초)
@@ -48,8 +48,8 @@ class KoreanTeacher(Enemy):
             "kt_chase_timeout": 5.0,            # 추적 포기 시간 (초)
             
             # AI 판단 관련
-            "kt_player_proximity_threshold": 120.0,  # 플레이어 감지 거리 (픽셀)
-            "kt_retreat_threshold": 40.0,            # 후퇴 판단 거리 (픽셀)
+            "kt_player_proximity_threshold": 1200.0,  # 플레이어 감지 거리 (픽셀)
+            "kt_retreat_threshold": 400.0,            # 후퇴 판단 거리 (픽셀)
         }
     
     def get_attack_pattern_data(self) -> dict[str, float]:
