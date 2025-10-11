@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Set
+
 from core.component import Component
 
 @dataclass
@@ -9,3 +11,5 @@ class HitboxComponent(Component):
     angle: float
     duration: float # How long the hitbox lasts in seconds
     timer: float = 0.0
+    visual_type: str | None = None
+    hit_enemies: Set[int] = field(default_factory=set)

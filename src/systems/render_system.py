@@ -35,23 +35,43 @@ class RenderSystem(ISystem):
             sprite.rect.center = (pos.x, pos.y)
             self.screen.blit(sprite.surface, sprite.rect)
 
-        # Draw hitboxes for visual debugging
+        # Draw hitboxes for visual debugging or weapon animation
         for entity in entity_manager.get_entities_with_components(HitboxComponent, PositionComponent):
             pos = entity_manager.get_component(entity.id, PositionComponent)
             hitbox = entity_manager.get_component(entity.id, HitboxComponent)
 
-            # Create a surface for the arc since pygame.draw.arc doesn't support alpha
-            arc_surface = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
-            
-            # Define the bounding rectangle for the arc
-            arc_rect = pygame.Rect(pos.x - hitbox.width, pos.y - hitbox.width, hitbox.width * 2, hitbox.width * 2)
+            if hitbox.visual_type == 'baseball_bat':
+                # Animate the bat swing
+                progress = hitbox.timer / hitbox.duration
+                start_angle_deg = hitbox.angle - hitbox.height / 2
+                end_angle_deg = hitbox.angle + hitbox.height / 2
+                current_angle_deg = start_angle_deg + (end_angle_deg - start_angle_deg) * progress
 
-            # Calculate start and end angles
-            start_angle = math.radians(hitbox.angle - hitbox.height / 2)
-            end_angle = math.radians(hitbox.angle + hitbox.height / 2)
+                # Create a bat surface
+                bat_length = hitbox.width
+                bat_width = 20
+                bat_surface = pygame.Surface((bat_length, bat_width), pygame.SRCALPHA)
+                bat_surface.fill((139, 69, 19)) # Brown color for the bat
 
-            pygame.draw.arc(arc_surface, (255, 255, 255, 100), arc_rect, -end_angle, -start_angle, 5)
-            self.screen.blit(arc_surface, (0, 0))
+                # Rotate and position the bat
+                rotated_bat = pygame.transform.rotate(bat_surface, -current_angle_deg)
+                
+                # Offset the bat from the player center to make it swing
+                offset_radius = bat_length / 2
+                offset_angle_rad = math.radians(current_angle_deg)
+                offset_x = offset_radius * math.cos(offset_angle_rad)
+                offset_y = offset_radius * math.sin(offset_angle_rad)
+
+                bat_rect = rotated_bat.get_rect(center=(pos.x + offset_x, pos.y + offset_y))
+                self.screen.blit(rotated_bat, bat_rect)
+            else:
+                # Fallback to drawing a simple arc for other hitboxes
+                arc_surface = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+                arc_rect = pygame.Rect(pos.x - hitbox.width, pos.y - hitbox.width, hitbox.width * 2, hitbox.width * 2)
+                start_angle = math.radians(hitbox.angle - hitbox.height / 2)
+                end_angle = math.radians(hitbox.angle + hitbox.height / 2)
+                pygame.draw.arc(arc_surface, (255, 255, 255, 100), arc_rect, -end_angle, -start_angle, 5)
+                self.screen.blit(arc_surface, (0, 0))
 
         # Draw Player UI (XP Bar and Level)
         player_entities = entity_manager.get_entities_with_components(PlayerComponent)

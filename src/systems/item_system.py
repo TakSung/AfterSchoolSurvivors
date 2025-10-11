@@ -47,48 +47,58 @@ class ItemSystem(ISystem):
         player_comp = self.entity_manager.get_component(entity.id, PlayerComponent)
         attack_comp = self.entity_manager.get_component(entity.id, AttackComponent)
 
-        has_weapon = False
-        for item in inventory.items:
-            if not item:
-                continue
+        # Determine the active weapon (highest level)
+        active_weapon = None
+        highest_level = -1
+        if inventory.items:
+            for item in inventory.items:
+                if item and hasattr(item, 'item_type') and item.item_type == ItemType.WEAPON:
+                    if hasattr(item, 'level') and item.level > highest_level:
+                        highest_level = item.level
+                        active_weapon = item
 
-            effects = item.get_effect()
+        # Apply active weapon's primary effects
+        if attack_comp and active_weapon:
+            effects = active_weapon.get_effect()
+            attack_comp.weapon_type = effects.get("weapon_type")
+            attack_comp.projectiles = effects.get("projectiles", 1)
+            attack_comp.bounces = effects.get("bounces", 0)
+            attack_comp.pierce = effects.get("pierce", 0)
+            attack_comp.angle = effects.get("angle", 90)
 
-            # Passive stats
-            player_comp.movement_speed += player_comp.base_movement_speed * effects.get('movement_speed_increase', 0)
-            if attack_comp:
-                attack_comp.attack_speed += attack_comp.base_attack_speed * effects.get('attack_speed_increase', 0)
+        # Apply passive effects from ALL items
+        if inventory.items:
+            for item in inventory.items:
+                if not item:
+                    continue
 
-            # Weapon effects (apply first weapon found)
-            if attack_comp and item.item_type == ItemType.WEAPON and not has_weapon:
-                attack_comp.weapon_type = effects.get("weapon_type")
-                attack_comp.projectiles = effects.get("projectiles", 1)
-                attack_comp.bounces = effects.get("bounces", 0)
-                attack_comp.pierce = effects.get("pierce", 0)
-                attack_comp.angle = effects.get("angle", 90)
-                has_weapon = True
+                effects = item.get_effect()
 
-            # Special ability effects
-            if "invulnerability_jump" in effects:
-                jump_props = effects["invulnerability_jump"]
-                player_comp.invulnerability_cooldown = jump_props["cooldown"]
-                player_comp.invulnerability_duration = jump_props["duration"]
-                
-                if not player_comp.is_invulnerable:
-                    player_comp.invulnerability_timer += dt
-                    if player_comp.invulnerability_timer >= player_comp.invulnerability_cooldown:
-                        player_comp.is_invulnerable = True
-                        player_comp.invulnerability_timer = 0
-                else:
-                    player_comp.invulnerability_timer += dt
-                    if player_comp.invulnerability_timer >= player_comp.invulnerability_duration:
-                        player_comp.is_invulnerable = False
-                        player_comp.invulnerability_timer = 0
-                        # Synergy: Baseball bat swing on land
-                        if ItemID.BASEBALL_BAT in equipped_item_ids:
-                            # This needs to be handled in a system that can trigger an attack.
-                            # For now, we can set a flag on the player component.
-                            setattr(player_comp, 'trigger_bat_swing', True)
+                # Passive stats
+                if player_comp:
+                    player_comp.movement_speed += player_comp.base_movement_speed * effects.get('movement_speed_increase', 0)
+                if attack_comp:
+                    attack_comp.attack_speed += attack_comp.base_attack_speed * effects.get('attack_speed_increase', 0)
+
+                # Special ability effects
+                if player_comp and "invulnerability_jump" in effects:
+                    jump_props = effects["invulnerability_jump"]
+                    player_comp.invulnerability_cooldown = jump_props["cooldown"]
+                    player_comp.invulnerability_duration = jump_props["duration"]
+                    
+                    if not player_comp.is_invulnerable:
+                        player_comp.invulnerability_timer += dt
+                        if player_comp.invulnerability_timer >= player_comp.invulnerability_cooldown:
+                            player_comp.is_invulnerable = True
+                            player_comp.invulnerability_timer = 0
+                    else:
+                        player_comp.invulnerability_timer += dt
+                        if player_comp.invulnerability_timer >= player_comp.invulnerability_duration:
+                            player_comp.is_invulnerable = False
+                            player_comp.invulnerability_timer = 0
+                            # Synergy: Baseball bat swing on land
+                            if ItemID.BASEBALL_BAT in equipped_item_ids:
+                                setattr(player_comp, 'trigger_bat_swing', True)
 
 
     def apply_synergies(self, entity, inventory, equipped_item_ids):
