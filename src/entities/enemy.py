@@ -130,6 +130,7 @@ class Enemy(ABC):
         """체력 컴포넌트 추가"""
         base_health = self.enemy_type.base_health
         health_component = HealthComponent(
+            base_maximum=base_health,
             current=base_health,
             maximum=base_health,
             status=EntityStatus.ALIVE

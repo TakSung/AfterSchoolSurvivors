@@ -37,7 +37,7 @@ class KoreanTeacher(Enemy):
         
         return {
             # 이동 관련 매개변수  
-            "kt_approach_speed": 2.0,           # 접근 속도 (픽셀/프레임)
+            "kt_approach_speed": 10.0,           # 접근 속도 (픽셀/프레임)
             "kt_min_attack_distance": 60.0,     # 최소 공격 거리 (픽셀)
             "kt_max_attack_distance": 100.0,    # 최대 공격 거리 (픽셀)  
             "kt_optimal_distance": 80.0,        # 최적 공격 거리 (픽셀)

@@ -26,8 +26,10 @@ src\entities\item.py
 src\systems\item_system.py를 테스트 해볼려고 만든건야." 플레이어는 중간에 있고 1,2,3 키를 누르면 각각 야구배트, 농구공, 축구공이 나오게 해줘 . 공격은 마우스 방향대로 나가게 해줘"를 구현 한거야. 여기에 적들을 추가해주고.
 
 
-
-tests/total/system/test_weapons_item.py 기반으로 야구배트를 테스트할거야. 
+tests/total/system/test_weapons_item.py는 src\entities\weapons.py
+src\entities\item.py
+src\systems\item_system.py를 테스트 해볼려고 만든건야. tests/total/system/test_weapons_item.py 기반으로 야구배트를 테스트할거야. 
+여기에 적들을 추가해주고. 공격은 마우스 방향대로 나가게 해줘. 관련 정보를 제공할건데 야구배트 관련된 것만 확인해줘.
 
 
 #### 3.4.1. 무기 아이템 (3종)
