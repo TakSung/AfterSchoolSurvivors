@@ -124,5 +124,9 @@ class RenderSystem(ISystem):
             level_text = self.font.render(f"Level: {player_comp.level}", True, (255, 255, 255))
             self.screen.blit(level_text, (25, self.screen.get_height() - 60))
 
+            # Total Experience Text
+            total_exp_text = self.font.render(f"Score: {player_comp.total_experience}", True, (255, 255, 255))
+            self.screen.blit(total_exp_text, (25, 10))
+
 
         pygame.display.flip()

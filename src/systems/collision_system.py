@@ -194,6 +194,7 @@ class CollisionSystem(ISystem):
                 if entity_manager.has_component(item_entity.id, ExperienceComponent):
                     exp_comp = entity_manager.get_component(item_entity.id, ExperienceComponent)
                     player_comp.experience += exp_comp.amount
+                    player_comp.total_experience += exp_comp.amount
                     entity_manager.destroy_entity(item_entity.id)
 
     def handle_projectile_wall_collisions(self, entity_manager: EntityManager):
