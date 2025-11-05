@@ -69,10 +69,11 @@ def main():
 
     running = True
     game_time = 0.0
+    i=0
     while running:
         delta_time = clock.tick(FPS) / 60.0
-        game_time += delta_time
-
+        i+=1
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -108,7 +109,9 @@ def main():
         input_system.update(entity_manager, delta_time)
         item_system.update(delta_time)
         trap_system.update(delta_time)
-        enemy_spawner_system.update(entity_manager, delta_time, game_time)
+        if i%20==1:
+            game_time += delta_time
+            enemy_spawner_system.update(entity_manager, delta_time, game_time)
         enemy_movement_system.update(entity_manager, delta_time)
         player_attack_system.update(entity_manager, delta_time)
         movement_system.update(entity_manager, delta_time)
