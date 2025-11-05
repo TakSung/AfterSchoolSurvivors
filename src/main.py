@@ -52,7 +52,7 @@ def main():
     player_entity = entity_manager.create_entity()
     entity_manager.add_component(player_entity.id, PositionComponent(x=SCREEN_WIDTH / 2, y=SCREEN_HEIGHT / 2))
     entity_manager.add_component(player_entity.id, VelocityComponent(dx=0, dy=0))
-    entity_manager.add_component(player_entity.id, HealthComponent(base_maximum=100, current=100, maximum=100, status=EntityStatus.ALIVE))
+    entity_manager.add_component(player_entity.id, HealthComponent(base_maximum=150, current=150, maximum=150, status=EntityStatus.ALIVE))
     entity_manager.add_component(player_entity.id, PlayerComponent())
     entity_manager.add_component(player_entity.id, InventoryComponent())
     entity_manager.add_component(player_entity.id, AttackComponent())

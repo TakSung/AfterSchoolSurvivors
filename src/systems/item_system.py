@@ -66,6 +66,14 @@ class ItemSystem(ISystem):
             attack_comp.pierce = effects.get("pierce", 0)
             attack_comp.angle = effects.get("angle", 90)
 
+            # AI-NOTE: 2025-11-05 무기별 기본 데미지 차등 적용
+            # - 이유: 사용자의 요청으로 게임 밸런스 조정
+            # - 요구사항: 축구공과 농구공의 데미지를 증가시켜달라는 요청
+            if attack_comp.weapon_type == "soccer_ball":
+                attack_comp.damage = int(attack_comp.base_damage * 1.5) # 50% 증가
+            elif attack_comp.weapon_type == "basketball":
+                attack_comp.damage = int(attack_comp.base_damage * 1.2) # 20% 증가
+
         # Apply passive effects from ALL items
         if inventory.items:
             for item in inventory.items:
