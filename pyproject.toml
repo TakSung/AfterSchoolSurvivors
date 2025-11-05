@@ -28,7 +28,8 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["."]
+include = ["src*"]
 
 [tool.ruff]
 # 검사할 파일 및 디렉터리 지정
