@@ -59,10 +59,20 @@ class CollisionSystem(ISystem):
                         player_health.status = EntityStatus.DEAD
 
                     # AI-NOTE : 2025-01-05 충돌 후 무적 시간 부여
-                    # - 이유: 플레이어와 적 모두 짧은 무적 시간을 부여하여 연속 데미지 방지
-                    # - 요구사항: 플레이어 0.5초, 적 0.3초 무적
-                    player_comp.is_invulnerable = True
-                    player_comp.invulnerability_timer = 0.0
+                    # - 이유: 플레이어와 적 모두 짧은 무적 시간을 부여하여
+                    #   연속 데미지 방지
+                    # - 요구사항: 플레이어 충돌 무적 0.5초, 적 0.3초 무적
+                    # AI-DEV : 기존 무적 시간을 보존하면서 충돌 무적 적용
+                    # - 문제: timer를 0.0으로 리셋하면 농구화 같은
+                    #   다른 무적 시스템 진행 상태 파괴
+                    # - 해결책: 이미 무적 중이면 더 긴 무적을 유지,
+                    #   무적이 아닐 때만 충돌 무적 적용
+                    if not player_comp.is_invulnerable:
+                        player_comp.is_invulnerable = True
+                        player_comp.invulnerability_timer = 0.0
+                        player_comp.invulnerability_duration = (
+                            player_comp.collision_invuln_duration
+                        )
 
                     enemy_comp.is_invulnerable = True
                     enemy_comp.invulnerability_timer = 0.0
@@ -225,22 +235,29 @@ class CollisionSystem(ISystem):
         entity_manager.add_component(orb_entity.id, SpriteComponent(surface=orb_surface, rect=orb_rect))
 
     # AI-NOTE : 2025-01-05 충돌 무적 타이머 업데이트 시스템
-    # - 이유: 플레이어와 적의 무적 상태를 시간에 따라 자동으로 해제하기 위함
-    # - 요구사항: 플레이어(0.5초 충돌 무적), 적(0.3초 무적) 시간 관리
-    # - 히스토리: 농구화 아이템의 무적과는 별도로 충돌 무적 시스템 추가
-    def update_invulnerability_timers(self, entity_manager: EntityManager, delta_time: float) -> None:
+    # - 이유: 플레이어와 적의 무적 상태를 시간에 따라 자동으로 해제
+    # - 요구사항: 플레이어(충돌/아이템 무적), 적(0.3초 무적) 시간 관리
+    # - 히스토리: 하드코딩된 0.5초/0.6초 -> duration 필드 기반으로 변경
+    def update_invulnerability_timers(
+        self, entity_manager: EntityManager, delta_time: float
+    ) -> None:
         """플레이어와 적의 무적 타이머를 업데이트하고 시간 경과 시 무적 해제"""
 
-        # AI-DEV : 플레이어 충돌 무적 타이머 처리
-        # - 문제: 농구화 아이템의 무적(1초)과 충돌 무적(0.5초)을 구분해야 함
-        # - 해결책: invulnerability_timer가 0.5초 이하일 때만 충돌 무적으로 간주
-        # - 주의사항: 농구화 무적은 item_system.py에서 별도로 관리됨
-        for entity in entity_manager.get_entities_with_components(PlayerComponent):
-            player_comp = entity_manager.get_component(entity.id, PlayerComponent)
-            if player_comp.is_invulnerable and player_comp.invulnerability_timer < 0.6:
+        # AI-DEV : 플레이어 무적 타이머 처리 (충돌 + 아이템 무적 통합)
+        # - 문제: 하드코딩된 0.5초/0.6초로 인해 무적시간 변경 불가능
+        # - 해결책: invulnerability_duration 필드를 사용하여 유연하게 처리
+        # - 주의사항: 농구화 무적(1초)과 충돌 무적(0.5초)을 duration으로 구분
+        for entity in entity_manager.get_entities_with_components(
+            PlayerComponent
+        ):
+            player_comp = entity_manager.get_component(
+                entity.id, PlayerComponent
+            )
+            if player_comp.is_invulnerable:
                 player_comp.invulnerability_timer += delta_time
-                # 충돌 무적 시간(0.5초) 경과 시 무적 해제
-                if player_comp.invulnerability_timer >= 0.5:
+                # duration에 도달하면 무적 해제
+                if (player_comp.invulnerability_timer >=
+                        player_comp.invulnerability_duration):
                     player_comp.is_invulnerable = False
                     player_comp.invulnerability_timer = 0.0
 
