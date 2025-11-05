@@ -22,6 +22,14 @@ class EnemyComponent(Component):
     # - 해결책: 타입별 전용 데이터를 저장할 수 있는 딕셔너리 필드 추가
     # - 주의사항: 타입 안전성을 위해 특정 키 값들은 문서화 필요
     type_specific_data: dict[str, float] = field(default_factory=dict)
+
+    # AI-NOTE : 2025-01-05 충돌 시 임시 무적 시스템 도입
+    # - 이유: 프레임 단위 연속 데미지로 인한 즉사 방지 요구사항
+    # - 요구사항: 무기에 맞았을 때 0.3초 무적 시간 부여로 다중 피격 방지
+    # - 히스토리: 기존에는 매 프레임 데미지 적용으로 적이 즉사하는 문제 존재
+    is_invulnerable: bool = False           # 무적 상태 여부
+    invulnerability_timer: float = 0.0      # 무적 타이머 (초)
+    invulnerability_duration: float = 0.3   # 무적 지속시간 (0.3초)
     
     def __post_init__(self) -> None:
         """적 타입에 따른 초기 데이터 설정"""
