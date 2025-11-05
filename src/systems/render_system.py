@@ -9,6 +9,7 @@ from components.position_component import PositionComponent
 from components.sprite_component import SpriteComponent
 from components.player_component import PlayerComponent
 from components.hitbox_component import HitboxComponent
+from components.health_component import HealthComponent
 
 if TYPE_CHECKING:
     from core.entity_manager import EntityManager
@@ -20,6 +21,23 @@ class RenderSystem(ISystem):
     def __init__(self, screen: pygame.Surface):
         self.screen = screen
         self.font = pygame.font.Font(None, 36)
+
+    def _draw_hp_bar(self, pos: PositionComponent, sprite: SpriteComponent, health: HealthComponent) -> None:
+        """Draws the HP bar above the entity's sprite."""
+        hp_bar_width = sprite.rect.width
+        hp_bar_height = 5
+        hp_bar_x = pos.x - hp_bar_width / 2
+        hp_bar_y = pos.y - sprite.rect.height / 2 - hp_bar_height - 2
+
+        fill_ratio = health.current / health.maximum
+        fill_width = hp_bar_width * fill_ratio
+
+        # Draw background
+        pygame.draw.rect(self.screen, (255, 0, 0), (hp_bar_x, hp_bar_y, hp_bar_width, hp_bar_height))
+        # Draw HP fill
+        pygame.draw.rect(self.screen, (0, 255, 0), (hp_bar_x, hp_bar_y, fill_width, hp_bar_height))
+        # Draw border
+        pygame.draw.rect(self.screen, (255, 255, 255), (hp_bar_x, hp_bar_y, hp_bar_width, hp_bar_height), 1)
 
     def update(self, entity_manager: EntityManager, delta_time: float) -> None:
         """
@@ -34,6 +52,13 @@ class RenderSystem(ISystem):
 
             sprite.rect.center = (pos.x, pos.y)
             self.screen.blit(sprite.surface, sprite.rect)
+
+        # Draw HP bars
+        for entity in entity_manager.get_entities_with_components(PositionComponent, SpriteComponent, HealthComponent):
+            pos = entity_manager.get_component(entity.id, PositionComponent)
+            sprite = entity_manager.get_component(entity.id, SpriteComponent)
+            health = entity_manager.get_component(entity.id, HealthComponent)
+            self._draw_hp_bar(pos, sprite, health)
 
         # Draw hitboxes for visual debugging or weapon animation
         for entity in entity_manager.get_entities_with_components(HitboxComponent, PositionComponent):

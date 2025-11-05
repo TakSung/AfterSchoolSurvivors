@@ -159,3 +159,12 @@ BaseballBat, HitboxComponent 사용하여 기존 코드 업데이트
 from components.hitbox_component import HitboxComponent
 from entities.weapons import BaseballBat 를 사용하여 적용 
 tests\total\system\test_baseball_bat_integration.py 참고
+
+
+목표: 유닛 충돌시 일정시간 무적 만들기
+현황: 플레이어가 적과 충돌 혹은 적이 플레이어의 무기에 닿았을때때 프레임마다 충돌 판정이 되어 피가 계속 달아
+구현 방향: 유닛이 서로 충돌했을때 플레이어와 적을 아주 잠깐 무적으로 만들기
+구현 효과: 유닛끼리 충돌해도 즉사하지 않는다
+
+
+hp바바
